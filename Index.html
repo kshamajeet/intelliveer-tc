@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intelliveer — Treatment Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #EC6E4D;
+  --primary2: #F9AC42;
+  --primary-grad: linear-gradient(135deg, #EC6E4D 0%, #F9AC42 100%);
+  --bg: #ffffff;
+  --bg2: #f5f5f5;
+  --bg3: #eeeeee;
+  --border: #e0e0e0;
+  --border2: #d0d0d0;
+  --text: #1a1a1a;
+  --text-mid: #444444;
+  --text-muted: #888888;
+  --nav-bg: #2d2d2d;
+  --nav-icon: #aaaaaa;
+  --nav-active: #ffffff;
+  --left-panel: 220px;
+  --right-panel: 260px;
+  --nav-width: 52px;
+  --header-h: 48px;
+  --subheader-h: 44px;
+  --patbar-h: 32px;
+  font-family: 'Montserrat', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg2); color:var(--text); font-family:'Montserrat',sans-serif; font-size:13px; overflow-x:hidden; }
+
+/* ═══════ HEADER ═══════ */
+.header {
+  height: var(--header-h);
+  background: var(--primary-grad);
+  display: flex; align-items: center;
+  position: fixed; top:0; left:0; right:0; z-index:500;
+  padding: 0 14px 0 0;
+  box-shadow: 0 2px 8px rgba(236,110,77,0.3);
+}
+.header-logo {
+  width: var(--nav-width); height: var(--header-h);
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(0,0,0,0.15); flex-shrink:0;
+}
+.header-logo svg { width:26px; height:26px; fill:white; }
+.header-biz { color:white; font-weight:700; font-size:13px; padding:0 16px; flex-shrink:0; }
+.header-search {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.4);
+  border-radius:6px; padding:5px 10px; min-width:220px;
+  color:white; font-family:'Montserrat',sans-serif; font-size:12px;
+}
+.header-search input { background:transparent; border:none; outline:none; color:white; font-family:inherit; font-size:12px; width:140px; }
+.header-search input::placeholder { color:rgba(255,255,255,0.7); }
+.header-patient-strip {
+  flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.pat-photo-main {
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.2); border-radius:6px; padding:4px 12px;
+}
+.pat-photo { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.4); border:2px solid white; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:white; }
+.pat-name-h { color:white; font-weight:700; font-size:13px; }
+.pat-id-h { color:rgba(255,255,255,0.8); font-size:10px; }
+.pat-photos-small { display:flex; gap:4px; }
+.pat-photo-sm { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.3); border:2px solid rgba(255,255,255,0.6); }
+.header-staff { display:flex; align-items:center; gap:10px; color:white; font-size:12px; font-weight:500; }
+.header-icons { display:flex; gap:10px; align-items:center; }
+.h-icon { width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; cursor:pointer; color:white; font-size:13px; }
+
+/* ═══════ LEFT NAV ═══════ */
+.left-nav {
+  position: fixed; top:var(--header-h); left:0; bottom:0;
+  width: var(--nav-width); background: var(--nav-bg);
+  display:flex; flex-direction:column; align-items:center;
+  padding: 8px 0; gap:4px; z-index:400; overflow:hidden;
+}
+.nav-icon {
+  width:38px; height:38px; border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--nav-icon); cursor:pointer; font-size:16px;
+  transition:all 0.15s;
+}
+.nav-icon:hover { background:rgba(255,255,255,0.1); color:white; }
+.nav-icon.active { background:rgba(236,110,77,0.3); color:var(--primary); }
+.nav-divider { width:32px; height:1px; background:rgba(255,255,255,0.1); margin:4px 0; }
+
+/* ═══════ MAIN LAYOUT ═══════ */
+.app-body {
+  margin-top: var(--header-h);
+  margin-left: var(--nav-width);
+  display:flex; flex-direction:column; min-height: calc(100vh - var(--header-h));
+}
+
+/* Sub-header */
+.sub-header {
+  height: var(--subheader-h);
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display:flex; align-items:center;
+  padding: 0 16px; gap:6px;
+  position: sticky; top: var(--header-h); z-index:300;
+}
+.sh-icon {
+  width:32px; height:32px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--text-muted); cursor:pointer; font-size:15px;
+  transition:all 0.13s;
+}
+.sh-icon:hover { background:var(--bg2); color:var(--text); }
+.sh-icon.active { background:#fff3ee; color:var(--primary); }
+.sh-divider { width:1px; height:22px; background:var(--border); margin:0 4px; }
+
+/* Patient info bar */
+.pat-bar {
+  height: var(--patbar-h);
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  display:flex; align-items:center;
+  padding: 0 16px; gap:6px;
+  font-size:11px; color:var(--text-mid);
+  position: sticky; top: calc(var(--header-h) + var(--subheader-h)); z-index:290;
+}
+.pat-bar-sep { color:var(--border2); margin:0 2px; }
+.pat-bar span { font-weight:500; }
+.pat-bar .tag { background:var(--primary2); color:white; font-weight:600; font-size:10px; padding:1px 7px; border-radius:10px; }
+
+/* Content row */
+.content-row {
+  display:flex; flex:1;
+  min-height: calc(100vh - var(--header-h) - var(--subheader-h) - var(--patbar-h));
+}
+
+/* Left panel */
+.left-panel {
+  width: var(--left-panel); flex-shrink:0;
+  background:white; border-right:1px solid var(--border);
+  padding:14px 0;
+  position: sticky; top: calc(var(--header-h) + var(--subheader-h) + var(--patbar-h));
+  height: calc(100vh - var(--header-h) - var(--subheader-h) - var(--patbar-h));
+  overflow-y:auto;
+}
+.lp-title { font-size:13px; font-weight:700; padding:0 14px 6px; color:var(--text); display:flex; align-items:center; gap:6px; }
+.lp-back { color:var(--text-muted); font-size:16px; cursor:pointer; }
+.lp-date { font-size:10px; color:var(--text-muted); padding:0 14px 10px; }
+.lp-section { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); padding:8px 14px 4px; }
+.lp-step {
+  display:flex; align-items:center; gap:10px;
+  padding:8px 14px; cursor:pointer; transition:background 0.13s;
+  border-left:3px solid transparent;
+}
+.lp-step:hover { background:var(--bg2); }
+.lp-step.active { background:#fff8f0; border-left-color:var(--primary2); }
+.lp-step-dot { width:10px; height:10px; border-radius:50%; border:2px solid var(--border2); flex-shrink:0; }
+.lp-step.done .lp-step-dot { background:var(--primary); border-color:var(--primary); }
+.lp-step.active .lp-step-dot { background:var(--primary2); border-color:var(--primary2); }
+.lp-step-label { font-size:12px; font-weight:500; color:var(--text-muted); }
+.lp-step.active .lp-step-label { color:var(--primary2); font-weight:600; }
+.lp-step.done .lp-step-label { color:var(--text-mid); }
+.lp-connector { width:2px; height:14px; background:var(--border); margin-left:calc(14px + 4px); }
+
+/* Main panel */
+.main-panel {
+  flex:1; background:var(--bg2); overflow-y:auto;
+  padding-bottom:80px;
+}
+
+/* Right panel */
+.right-panel {
+  width: var(--right-panel); flex-shrink:0;
+  background:white; border-left:1px solid var(--border);
+  position: sticky; top: calc(var(--header-h) + var(--subheader-h) + var(--patbar-h));
+  height: calc(100vh - var(--header-h) - var(--subheader-h) - var(--patbar-h));
+  overflow-y:auto;
+}
+.rp-title { font-size:12px; font-weight:700; padding:12px 14px 8px; color:var(--text); border-bottom:1px solid var(--border); }
+.rp-section { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); padding:10px 14px 6px; }
+.rp-item {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:6px 14px; border-bottom:1px solid #f5f5f5;
+}
+.rp-item-icon { color:var(--primary); font-size:13px; flex-shrink:0; margin-top:1px; }
+.rp-item-text { font-size:10.5px; color:var(--text-mid); line-height:1.5; flex:1; font-family:'Montserrat',monospace; }
+.rp-item-check { width:16px; height:16px; border-radius:4px; border:1.5px solid var(--border2); flex-shrink:0; margin-top:1px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:9px; color:transparent; }
+.rp-item-check.done { background:var(--primary); border-color:var(--primary); color:white; }
+.rp-subsection { font-size:10px; font-weight:700; color:var(--text-muted); padding:8px 14px 4px; text-transform:uppercase; letter-spacing:0.05em; }
+
+/* ═══════ MAIN CONTENT INNER ═══════ */
+.mc-inner { padding:0 0 20px; }
+
+/* Tab nav */
+.tab-nav {
+  background:white; border-bottom:1px solid var(--border);
+  display:flex; align-items:stretch; padding:0 16px; gap:2px;
+  position:sticky; top:0; z-index:200;
+}
+.tnav-tab {
+  display:flex; align-items:center; gap:6px;
+  padding:0 14px; height:40px; font-size:12px; font-weight:500;
+  color:var(--text-muted); background:transparent; border:none; cursor:pointer;
+  border-bottom:3px solid transparent; transition:all 0.15s; white-space:nowrap;
+  font-family:'Montserrat',sans-serif;
+}
+.tnav-tab:hover { color:var(--text); }
+.tnav-tab.active { color:var(--primary); border-bottom-color:var(--primary); font-weight:600; }
+.tab-dot { width:6px; height:6px; border-radius:50%; background:#ddd; flex-shrink:0; transition:background 0.2s; }
+.tab-dot.done { background:#4caf50; }
+.tab-dot.partial { background:var(--primary2); }
+
+.tab-page { display:none; }
+.tab-page.active { display:block; }
+
+/* ═══════ PRESET BANNER ═══════ */
+.preset-banner {
+  background:#fff8f0; border-bottom:1px solid #fdd9c5;
+  padding:8px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.preset-banner.hidden { display:none; }
+.preset-text { font-size:11px; color:var(--text-mid); }
+.preset-text strong { color:var(--primary); font-weight:600; }
+.btn-apply { background:var(--primary); color:white; font-family:'Montserrat',sans-serif; font-weight:600; font-size:11px; padding:5px 14px; border-radius:5px; border:none; cursor:pointer; }
+.btn-dismiss { background:transparent; border:1px solid var(--border2); color:var(--text-muted); font-family:'Montserrat',sans-serif; font-size:11px; padding:5px 10px; border-radius:5px; cursor:pointer; }
+
+/* ═══════ QUAD GRID ═══════ */
+.quad-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:12px 14px; }
+
+/* ═══════ QUADRANT ═══════ */
+.quadrant {
+  background:white; border-radius:10px; border:1.5px solid var(--border);
+  overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06);
+  transition:border-color 0.2s;
+}
+.quadrant:focus-within { border-color:var(--q-color); }
+.q-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 13px; border-bottom:1px solid var(--border);
+  background:var(--q-light);
+}
+.q-title { display:flex; align-items:center; gap:7px; font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--q-color); }
+.q-dot { width:7px; height:7px; border-radius:50%; background:var(--q-color); }
+.q-status { font-size:10px; color:var(--text-muted); background:white; border:1px solid var(--border); padding:2px 7px; border-radius:3px; font-family:'Montserrat',sans-serif; }
+.q-status.done { color:var(--q-color); border-color:var(--q-color); background:var(--q-light); font-weight:500; }
+
+/* Fav/Custom inner tabs */
+.q-tabs { display:flex; border-bottom:1px solid var(--border); }
+.q-tab { flex:1; padding:7px 8px; font-size:11px; font-weight:500; color:var(--text-muted); background:transparent; border:none; cursor:pointer; border-bottom:2px solid transparent; transition:all 0.14s; font-family:'Montserrat',sans-serif; }
+.q-tab:hover { color:var(--text); }
+.q-tab.active { color:var(--q-color); border-bottom-color:var(--q-color); font-weight:600; }
+
+.panel { display:block; }
+.panel.hidden { display:none; }
+
+.fav-list { padding:7px 11px; }
+.fav-item {
+  display:flex; align-items:center; gap:8px;
+  padding:8px 10px; border-radius:7px; border:1.5px solid var(--border);
+  background:var(--bg2); margin-bottom:4px; cursor:pointer; transition:all 0.13s;
+}
+.fav-item:hover { border-color:var(--q-color); background:var(--q-light); }
+.fav-item.selected { border-color:var(--q-color); background:var(--q-light); }
+.fav-star { color:var(--primary2); font-size:13px; flex-shrink:0; }
+.fav-label { font-size:10.5px; color:var(--text-mid); flex:1; line-height:1.4; }
+
+.q-body { padding:11px 12px; max-height:320px; overflow-y:auto; }
+.q-body::-webkit-scrollbar { width:3px; }
+.q-body::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+.field-row { display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; }
+.field-label { font-size:10px; font-weight:600; color:var(--text-muted); width:58px; flex-shrink:0; padding-top:5px; text-transform:uppercase; letter-spacing:0.04em; }
+.field-opts { display:flex; flex-wrap:wrap; gap:4px; flex:1; }
+
+/* Chip buttons */
+.opt {
+  padding:4px 9px; border-radius:5px; border:1.5px solid var(--border);
+  background:var(--bg2); color:var(--text-mid); font-family:'Montserrat',sans-serif;
+  font-size:10.5px; cursor:pointer; transition:all 0.12s; white-space:nowrap;
+}
+.opt:hover { border-color:var(--q-color); color:var(--q-color); background:var(--q-light); }
+.opt.sel { background:var(--q-light); border-color:var(--q-color); color:var(--q-color); font-weight:600; }
+
+/* Use primary2 for selection highlight on all opts */
+.opt.sel { background:#fff8f0; border-color:var(--primary2); color:var(--primary2); }
+.opt:hover { border-color:var(--primary); color:var(--primary); background:#fff3ee; }
+
+.type-scroll-wrap { flex:1; overflow-x:auto; }
+.type-scroll { display:flex; gap:4px; flex-wrap:nowrap; padding-bottom:2px; }
+.type-scroll::-webkit-scrollbar { height:2px; }
+.type-scroll::-webkit-scrollbar-thumb { background:var(--border2); border-radius:2px; }
+
+.toggle-row { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.toggle-label { font-size:10px; font-weight:600; color:var(--text-muted); width:58px; text-transform:uppercase; letter-spacing:0.04em; }
+.toggle-switch { position:relative; width:32px; height:18px; cursor:pointer; flex-shrink:0; }
+.toggle-switch input { display:none; }
+.toggle-track { position:absolute; inset:0; background:var(--border2); border-radius:9px; transition:background 0.2s; }
+.toggle-switch input:checked ~ .toggle-track { background:var(--primary); }
+.toggle-thumb { position:absolute; top:2px; left:2px; width:14px; height:14px; background:white; border-radius:50%; transition:left 0.2s; box-shadow:0 1px 3px rgba(0,0,0,0.2); }
+.toggle-switch input:checked ~ .toggle-track ~ .toggle-thumb { left:16px; }
+.toggle-sub { display:flex; gap:4px; opacity:0.35; pointer-events:none; transition:opacity 0.15s; }
+.toggle-sub.on { opacity:1; pointer-events:all; }
+
+.sec-label { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-muted); margin:9px 0 4px; border-top:1px solid var(--border); padding-top:8px; }
+.sec-label:first-child { border-top:none; padding-top:0; margin-top:0; }
+
+.aux-item { display:flex; align-items:center; gap:7px; padding:6px 9px; border-radius:6px; border:1.5px solid var(--border); background:var(--bg2); margin-bottom:4px; cursor:pointer; transition:all 0.12s; }
+.aux-item:hover { border-color:var(--primary); }
+.aux-item.sel { background:#fff8f0; border-color:var(--primary2); }
+.aux-chk { width:15px; height:15px; border-radius:3px; border:1.5px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:8px; color:transparent; flex-shrink:0; transition:all 0.12s; }
+.aux-item.sel .aux-chk { background:var(--primary2); border-color:var(--primary2); color:white; }
+.aux-name { font-size:12px; font-weight:500; flex:1; }
+.aux-cat { font-size:9px; color:var(--text-muted); background:white; border:1px solid var(--border); padding:1px 5px; border-radius:3px; }
+
+.elastic-card { background:var(--bg2); border:1px solid var(--border); border-radius:7px; padding:9px 11px; margin-bottom:7px; }
+.elastic-card-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--primary); margin-bottom:7px; }
+.e-row { display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+.e-lbl { font-size:9.5px; font-weight:700; color:var(--text-muted); width:38px; flex-shrink:0; text-transform:uppercase; }
+.e-opts { display:flex; flex-wrap:wrap; gap:3px; flex:1; }
+.e-opts .opt { font-size:10px; padding:3px 7px; }
+
+.instr-item { display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:6px; border:1.5px solid var(--border); background:var(--bg2); margin-bottom:4px; cursor:pointer; transition:all 0.12s; }
+.instr-item:hover { border-color:var(--primary); }
+.instr-item.sel { background:#f0fdf6; border-color:#4caf50; }
+.instr-icon { font-size:13px; width:18px; text-align:center; }
+.instr-name { font-size:12px; font-weight:500; flex:1; }
+.instr-chk { width:15px; height:15px; border-radius:3px; border:1.5px solid var(--border2); display:flex; align-items:center; justify-content:center; font-size:8px; color:transparent; flex-shrink:0; transition:all 0.12s; }
+.instr-item.sel .instr-chk { background:#4caf50; border-color:#4caf50; color:white; }
+
+textarea.notes { width:100%; background:var(--bg2); border:1.5px solid var(--border); border-radius:5px; padding:7px 9px; color:var(--text); font-family:'Montserrat',sans-serif; font-size:11px; resize:vertical; min-height:48px; outline:none; }
+textarea.notes:focus { border-color:var(--primary); }
+
+/* Quadrant colour vars */
+.wires        { --q-color:#2563eb; --q-light:#eff4ff; }
+.auxiliaries  { --q-color:#7c3aed; --q-light:#f4f0fe; }
+.elastics     { --q-color:#dc2626; --q-light:#fff1f1; }
+.instructions { --q-color:#059669; --q-light:#edfaf5; }
+
+/* ═══════ TOOTH CHART ═══════ */
+.tooth-chart-section {
+  margin:0 14px 14px; background:white;
+  border-radius:10px; border:1.5px solid var(--border);
+  box-shadow:0 1px 4px rgba(0,0,0,0.06); overflow:hidden;
+}
+.tc-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:9px 14px; border-bottom:1px solid var(--border);
+  background:#fafafa;
+}
+.tc-title { font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-mid); }
+.tc-legend { display:flex; gap:12px; align-items:center; }
+.tc-legend-item { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--text-muted); }
+.tc-legend-dot { width:10px; height:4px; border-radius:2px; }
+
+.tc-body { padding:12px 16px 16px; }
+.tc-arch-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); margin-bottom:6px; }
+
+.tooth-row {
+  display:flex; align-items:flex-end; gap:2px;
+  justify-content:center; position:relative; margin-bottom:4px;
+}
+.tooth-row.lower { align-items:flex-start; margin-top:4px; }
+.tooth-wrap { display:flex; flex-direction:column; align-items:center; gap:2px; }
+.tooth-num { font-size:8.5px; color:var(--text-muted); font-weight:600; }
+.tooth {
+  width:28px; height:34px; border-radius:4px 4px 7px 7px;
+  border:1.5px solid var(--border2); background:#fdf9f0;
+  cursor:pointer; transition:all 0.12s; position:relative;
+  display:flex; align-items:center; justify-content:center;
+}
+.tooth-row.lower .tooth { border-radius:7px 7px 4px 4px; }
+.tooth:hover { border-color:var(--primary); }
+.tooth.highlighted { border-color:var(--primary2); background:#fff8f0; }
+.tooth.broken { border-color:#dc2626; background:#fff1f1; }
+.tooth.future-bond { border-color:#2563eb; background:#eff4ff; }
+
+/* Wire overlay line */
+.wire-overlay {
+  position:absolute; height:3px; border-radius:2px;
+  top:50%; transform:translateY(-50%); pointer-events:none;
+  transition:all 0.3s; z-index:5;
+}
+.power-chain-overlay {
+  position:absolute; height:3px; border-radius:2px;
+  top:30%; transform:translateY(-50%); pointer-events:none;
+  z-index:5;
+}
+
+/* Elastic line SVG */
+.elastic-svg { position:absolute; top:0; left:0; pointer-events:none; z-index:10; }
+
+.tc-arch-sep { height:18px; display:flex; align-items:center; justify-content:center; position:relative; margin:2px 0; }
+.tc-arch-sep-line { width:100%; height:1px; background:var(--border); }
+.tc-arch-sep-label { position:absolute; background:white; padding:0 8px; font-size:9px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.05em; }
+
+.tc-tooth-indicators { display:flex; justify-content:center; gap:2px; margin-top:4px; }
+
+/* tooth overlay badges */
+.tooth-overlay {
+  position:absolute; bottom:2px; left:50%; transform:translateX(-50%);
+  width:6px; height:6px; border-radius:50%;
+}
+
+/* ═══════ SUMMARY BAR ═══════ */
+.summary-bar {
+  position:fixed; bottom:0; left:var(--nav-width); right:0; z-index:400;
+  background:white; border-top:2px solid var(--primary);
+  padding:8px 16px; display:flex; align-items:center; gap:12px;
+  box-shadow:0 -4px 16px rgba(0,0,0,0.08);
+}
+.sum-label { font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); flex-shrink:0; }
+.sum-text {
+  flex:1; font-size:11px; color:var(--text); background:var(--bg2);
+  border:1px solid var(--border); padding:5px 10px; border-radius:5px;
+  min-height:28px; line-height:1.7;
+}
+.sum-text .w { color:#2563eb; font-weight:500; }
+.sum-text .a { color:#7c3aed; font-weight:500; }
+.sum-text .e { color:#dc2626; font-weight:500; }
+.sum-text .i { color:#059669; font-weight:500; }
+.sum-text .ap { color:var(--primary); font-weight:500; }
+.sum-text .sep { color:var(--border2); margin:0 5px; }
+.btn-save {
+  background:var(--primary-grad); color:white; border:none;
+  font-family:'Montserrat',sans-serif; font-weight:700; font-size:12px;
+  padding:8px 20px; border-radius:7px; cursor:pointer;
+  box-shadow:0 2px 8px rgba(236,110,77,0.35); flex-shrink:0;
+}
+.btn-save:hover { transform:translateY(-1px); box-shadow:0 4px 12px rgba(236,110,77,0.45); }
+.btn-clr { background:transparent; border:1px solid var(--border2); color:var(--text-muted); font-family:'Montserrat',sans-serif; font-size:11px; padding:7px 12px; border-radius:5px; cursor:pointer; flex-shrink:0; }
+
+/* ═══════ VOICE PANEL ═══════ */
+.voice-btn {
+  width:40px; height:40px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; font-size:18px;
+  flex-shrink:0; transition:all 0.2s; position:relative;
+  background:var(--bg2); border:2px solid var(--border2); color:var(--text-muted);
+}
+.voice-btn:hover { border-color:var(--primary); color:var(--primary); }
+.voice-btn.listening {
+  background: var(--primary-grad);
+  border-color:transparent; color:white;
+  box-shadow:0 0 0 4px rgba(236,110,77,0.2);
+  animation: pulse-ring 1.2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0% { box-shadow:0 0 0 0 rgba(236,110,77,0.4); }
+  70% { box-shadow:0 0 0 12px rgba(236,110,77,0); }
+  100% { box-shadow:0 0 0 0 rgba(236,110,77,0); }
+}
+.voice-panel {
+  position:fixed; bottom:56px; left:var(--nav-width); right:0; z-index:500;
+  background:white; border-top:2px solid var(--primary);
+  box-shadow:0 -8px 32px rgba(0,0,0,0.12);
+  transform:translateY(100%); transition:transform 0.3s ease;
+  max-height:280px;
+}
+.voice-panel.open { transform:translateY(0); }
+.vp-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 18px; border-bottom:1px solid var(--border);
+  background:#fff8f0;
+}
+.vp-title { font-weight:700; font-size:13px; color:var(--primary); display:flex; align-items:center; gap:8px; }
+.vp-status {
+  font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px;
+  background:var(--bg2); color:var(--text-muted); transition:all 0.2s;
+}
+.vp-status.listening { background:#ffeee9; color:var(--primary); }
+.vp-status.processing { background:#fff3cd; color:#b45309; }
+.vp-status.done { background:#e8f5e9; color:#2e7d32; }
+.vp-close { background:transparent; border:1px solid var(--border); color:var(--text-muted); font-size:11px; padding:3px 10px; border-radius:4px; cursor:pointer; font-family:'Montserrat',sans-serif; }
+.vp-body { display:grid; grid-template-columns:1fr 1fr; gap:0; height:calc(280px - 48px); }
+.vp-left { padding:12px 16px; border-right:1px solid var(--border); overflow-y:auto; }
+.vp-right { padding:12px 16px; overflow-y:auto; }
+.vp-section-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:8px; }
+.vp-transcript {
+  background:var(--bg2); border:1.5px solid var(--border); border-radius:7px;
+  padding:10px 12px; min-height:60px; font-size:12px; color:var(--text-mid);
+  line-height:1.6; font-style:italic;
+}
+.vp-transcript .interim { color:var(--text-muted); }
+.vp-transcript .final { color:var(--text); font-style:normal; }
+.vp-parsed { display:flex; flex-direction:column; gap:6px; }
+.vp-parsed-item {
+  display:flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:6px; border:1.5px solid var(--border);
+  background:var(--bg2); transition:all 0.2s;
+}
+.vp-parsed-item.new { background:#fff8f0; border-color:var(--primary2); animation:fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(4px);} to{opacity:1;transform:translateY(0);} }
+.vp-parsed-cat {
+  font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em;
+  padding:2px 6px; border-radius:3px; flex-shrink:0;
+}
+.cat-wire { background:#eff4ff; color:#2563eb; }
+.cat-aux { background:#f4f0fe; color:#7c3aed; }
+.cat-elastic { background:#fff1f1; color:#dc2626; }
+.cat-instr { background:#edfaf5; color:#059669; }
+.vp-parsed-text { font-size:11px; color:var(--text-mid); flex:1; }
+.vp-parsed-apply {
+  font-size:10px; font-weight:600; color:var(--primary); background:transparent;
+  border:1px solid var(--primary2); border-radius:3px; padding:2px 7px; cursor:pointer;
+  font-family:'Montserrat',sans-serif; flex-shrink:0;
+}
+.vp-parsed-apply:hover { background:var(--primary); color:white; border-color:var(--primary); }
+.vp-hint { font-size:10px; color:var(--text-muted); margin-top:8px; line-height:1.6; }
+.vp-hint strong { color:var(--primary2); }
+.mic-wave { display:none; gap:2px; align-items:center; height:16px; }
+.mic-wave.active { display:flex; }
+.mic-wave span {
+  display:block; width:3px; border-radius:2px; background:white;
+  animation: wave 0.8s ease-in-out infinite;
+}
+.mic-wave span:nth-child(1){height:4px;animation-delay:0s;}
+.mic-wave span:nth-child(2){height:8px;animation-delay:0.1s;}
+.mic-wave span:nth-child(3){height:12px;animation-delay:0.2s;}
+.mic-wave span:nth-child(4){height:8px;animation-delay:0.3s;}
+.mic-wave span:nth-child(5){height:4px;animation-delay:0.4s;}
+@keyframes wave {
+  0%,100%{transform:scaleY(0.5);opacity:0.5;}
+  50%{transform:scaleY(1.2);opacity:1;}
+}
+/* Placeholder tabs */
+.placeholder-page { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:50px 20px; color:var(--text-muted); text-align:center; }
+.placeholder-icon { font-size:36px; margin-bottom:10px; opacity:0.35; }
+.placeholder-title { font-weight:700; font-size:15px; color:var(--text-muted); margin-bottom:5px; }
+.placeholder-sub { font-size:12px; }
+
+/* Appliance tab styles */
+.appl-page { padding:12px 14px; }
+.active-appl-card { background:white; border:1.5px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:12px; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.active-appl-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.active-appl-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-mid); }
+.active-appl-badge { font-size:10px; background:#fff8f0; border:1px solid #fdd9c5; color:var(--primary); padding:2px 9px; border-radius:20px; font-weight:600; }
+.active-appl-list { display:flex; flex-wrap:wrap; gap:7px; }
+.active-appl-pill { display:flex; align-items:center; gap:8px; background:var(--bg2); border:1.5px solid var(--border); border-radius:8px; padding:7px 11px; cursor:pointer; transition:all 0.13s; }
+.active-appl-pill:hover { border-color:var(--primary); }
+.active-appl-pill.selected { border-color:var(--primary); background:#fff3ee; }
+.appl-pill-icon { font-size:15px; }
+.appl-pill-name { font-size:12px; font-weight:600; }
+.appl-pill-detail { font-size:10px; color:var(--text-muted); }
+.appl-visit-log { background:white; border:1.5px solid var(--primary); border-radius:10px; padding:14px; margin-bottom:12px; box-shadow:0 0 0 3px rgba(236,110,77,0.08); display:none; }
+.appl-visit-log.visible { display:block; }
+.appl-log-title { font-weight:700; font-size:13px; color:var(--primary); margin-bottom:3px; }
+.appl-log-sub { font-size:10px; color:var(--text-muted); margin-bottom:12px; }
+.appl-log-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.appl-log-close { background:transparent; border:1px solid var(--border); color:var(--text-muted); font-size:11px; padding:3px 9px; border-radius:4px; cursor:pointer; font-family:'Montserrat',sans-serif; float:right; }
+.new-appl-section { background:white; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06); }
+.new-appl-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--bg2); border-bottom:1px solid var(--border); }
+.new-appl-title { font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-mid); }
+.new-appl-body { padding:12px 14px; }
+.appl-cat-tabs { display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px; }
+.appl-cat-tab { padding:5px 11px; border-radius:20px; border:1.5px solid var(--border); background:var(--bg2); font-size:11px; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all 0.13s; font-family:'Montserrat',sans-serif; }
+.appl-cat-tab:hover { border-color:var(--primary); color:var(--primary); }
+.appl-cat-tab.active { background:#fff3ee; border-color:var(--primary); color:var(--primary); font-weight:600; }
+.appl-opt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
+.appl-opt-card { border:1.5px solid var(--border); border-radius:8px; background:var(--bg2); padding:9px 11px; cursor:pointer; transition:all 0.13s; }
+.appl-opt-card:hover { border-color:var(--primary); }
+.appl-opt-card.sel { border-color:var(--primary); background:#fff3ee; }
+.appl-opt-icon { font-size:18px; margin-bottom:4px; }
+.appl-opt-name { font-size:11px; font-weight:600; margin-bottom:2px; }
+.appl-opt-desc { font-size:9.5px; color:var(--text-muted); line-height:1.4; }
+.appl-detail-panel { margin-top:12px; background:var(--bg2); border:1.5px solid var(--border); border-radius:9px; padding:12px; display:none; }
+.appl-detail-panel.visible { display:block; }
+.appl-detail-title { font-weight:700; font-size:12px; color:var(--primary); margin-bottom:10px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="header">
+  <div class="header-logo">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+  </div>
+  <div class="header-biz">OrthoGroup</div>
+  <div class="header-search">
+    <span>🔍</span>
+    <input type="text" placeholder="Search patients...">
+    <span style="color:rgba(255,255,255,0.7);font-size:10px;">▾</span>
+  </div>
+  <div class="header-patient-strip">
+    <div class="pat-photo-main">
+      <div class="pat-photo">PM</div>
+      <div>
+        <div class="pat-name-h">Priya Menon</div>
+        <div class="pat-id-h">#ORT-2847</div>
+      </div>
+    </div>
+    <div class="pat-photos-small">
+      <div class="pat-photo-sm"></div>
+      <div class="pat-photo-sm"></div>
+      <div class="pat-photo-sm"></div>
+    </div>
+  </div>
+  <div class="header-staff">
+    <span>Dr. Sharma</span>
+    <div class="header-icons">
+      <div class="h-icon">🕐</div>
+      <div class="h-icon">📋</div>
+      <div class="h-icon">🔒</div>
+      <div class="h-icon">☰</div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ LEFT NAV ═══════ -->
+<nav class="left-nav">
+  <div class="nav-icon">🏠</div>
+  <div class="nav-icon">👤</div>
+  <div class="nav-divider"></div>
+  <div class="nav-icon">📅</div>
+  <div class="nav-icon active">🦷</div>
+  <div class="nav-icon">✂️</div>
+  <div class="nav-divider"></div>
+  <div class="nav-icon">📊</div>
+  <div class="nav-icon">📄</div>
+  <div class="nav-icon">📁</div>
+  <div class="nav-divider"></div>
+  <div class="nav-icon">💬</div>
+  <div class="nav-icon">👥</div>
+  <div class="nav-icon">📋</div>
+  <div class="nav-icon">⚙️</div>
+</nav>
+
+<!-- ═══════ APP BODY ═══════ -->
+<div class="app-body">
+
+  <!-- Sub-header -->
+  <div class="sub-header">
+    <div class="sh-icon">👥</div>
+    <div class="sh-icon">💬</div>
+    <div class="sh-icon">💲</div>
+    <div class="sh-icon">🛡️</div>
+    <div class="sh-icon">📁</div>
+    <div class="sh-divider"></div>
+    <div class="sh-icon">📷</div>
+    <div class="sh-divider"></div>
+    <div class="sh-icon">🖼️</div>
+    <div class="sh-icon">📊</div>
+    <div class="sh-icon active">🦷</div>
+    <div class="sh-icon">👤</div>
+    <div class="sh-divider"></div>
+    <div class="sh-icon">📋</div>
+    <div class="sh-icon">📂</div>
+  </div>
+
+  <!-- Patient bar -->
+  <div class="pat-bar">
+    <span>Priya Menon</span><span class="pat-bar-sep">·</span>
+    <span>J-on</span><span class="pat-bar-sep">·</span>
+    <span>14y 2m</span><span class="pat-bar-sep">·</span>
+    <span>F</span><span class="pat-bar-sep">·</span>
+    <span>She/Her</span><span class="pat-bar-sep">·</span>
+    <span>Eng</span><span class="pat-bar-sep">·</span>
+    <span class="tag">Active Tx</span><span class="pat-bar-sep">·</span>
+    <span>Treatment 1</span><span class="pat-bar-sep">·</span>
+    <span>Dr. S</span><span class="pat-bar-sep">·</span>
+    <span>JS</span>
+  </div>
+
+  <!-- Content row -->
+  <div class="content-row">
+
+    <!-- Left panel -->
+    <div class="left-panel">
+      <div class="lp-title"><span class="lp-back">‹</span> Treatment card</div>
+      <div class="lp-date">06/14/2026</div>
+      <div class="lp-section">Adjustment</div>
+      <div class="lp-step done">
+        <div class="lp-step-dot"></div>
+        <div class="lp-step-label">Treatment overview</div>
+      </div>
+      <div class="lp-connector"></div>
+      <div class="lp-step done">
+        <div class="lp-step-dot"></div>
+        <div class="lp-step-label">Treatment instructions</div>
+      </div>
+      <div class="lp-connector"></div>
+      <div class="lp-step active">
+        <div class="lp-step-dot"></div>
+        <div class="lp-step-label">Current visit</div>
+      </div>
+      <div class="lp-connector"></div>
+      <div class="lp-step">
+        <div class="lp-step-dot"></div>
+        <div class="lp-step-label">Next visit</div>
+      </div>
+      <div class="lp-connector"></div>
+      <div class="lp-step">
+        <div class="lp-step-dot"></div>
+        <div class="lp-step-label">Chart documentation</div>
+      </div>
+    </div>
+
+    <!-- Main panel -->
+    <div class="main-panel">
+      <div class="mc-inner">
+
+        <!-- Tab nav -->
+        <div class="tab-nav">
+          <button class="tnav-tab active" onclick="switchTab('braces',this)"><div class="tab-dot" id="dot-braces"></div>Braces ▾</button>
+          <button class="tnav-tab" onclick="switchTab('appliance',this)"><div class="tab-dot" id="dot-appliance"></div>Appliance</button>
+          <button class="tnav-tab" onclick="switchTab('instructions',this)"><div class="tab-dot" id="dot-instructions"></div>Instructions</button>
+          <button class="tnav-tab" onclick="switchTab('records',this)"><div class="tab-dot" id="dot-records"></div>Records</button>
+          <button class="tnav-tab" onclick="switchTab('referrals',this)"><div class="tab-dot" id="dot-referrals"></div>Referrals</button>
+          <button class="tnav-tab" onclick="switchTab('retainers',this)"><div class="tab-dot" id="dot-retainers"></div>Retainers</button>
+          <button class="tnav-tab" onclick="switchTab('sos',this)"><div class="tab-dot" id="dot-sos"></div>SOS</button>
+        </div>
+
+        <!-- ══ BRACES TAB ══ -->
+        <div class="tab-page active" id="tab-braces">
+
+          <!-- Preset banner -->
+          <div class="preset-banner" id="presetBanner">
+            <div class="preset-text">⭐ <strong>Last visit preset available —</strong> New | 19×25 | SS | U+L Ext 7s · PC lower 6–6 · Class II R:U3–L7 Heavy · L:U3–L6 Medium · Oralizing + Tongue exercises</div>
+            <div style="display:flex;gap:6px;"><button class="btn-apply" onclick="applyPreset()">Apply Last Visit</button><button class="btn-dismiss" onclick="document.getElementById('presetBanner').classList.add('hidden')">Dismiss</button></div>
+          </div>
+
+          <!-- Quadrants -->
+          <div class="quad-grid">
+
+            <!-- WIRES -->
+            <div class="quadrant wires">
+              <div class="q-header"><div class="q-title"><div class="q-dot"></div>Wires</div><div class="q-status" id="wire-status">— not set</div></div>
+              <div class="q-tabs"><button class="q-tab active" onclick="qtab('wire','fav',this)">⭐ Favourite</button><button class="q-tab" onclick="qtab('wire','custom',this)">Custom</button></div>
+              <div id="wire-fav" class="panel fav-list">
+                <div class="fav-item" onclick="fav(this,'wire','New | 17×25 | TMA | Accentuated curve | CB-L Active | CB-R Active | 5–5')"><span class="fav-star">⭐</span><span class="fav-label">New | 17×25 | TMA | Accentuated curve | CB-L Active | CB-R Active | 5–5</span></div>
+                <div class="fav-item" onclick="fav(this,'wire','New | 19×25 | SS | Plain | 6–6 | Ext 7s')"><span class="fav-star">⭐</span><span class="fav-label">New | 19×25 | SS | Plain | 6–6 | Ext 7s</span></div>
+                <div class="fav-item" onclick="fav(this,'wire','Continue | 19×25 | SS | Reverse curve | lower 4–6 | Ext 7s')"><span class="fav-star">⭐</span><span class="fav-label">Continue | 19×25 | SS | Reverse curve | lower 4–6 | Ext 7s</span></div>
+                <div class="fav-item" onclick="fav(this,'wire','New | 16×22 | NiTi | Plain | 5–5')"><span class="fav-star">⭐</span><span class="fav-label">New | 16×22 | NiTi | Plain | 5–5</span></div>
+              </div>
+              <div id="wire-custom" class="panel hidden q-body">
+                <div class="field-row"><div class="field-label">Arch</div><div class="field-opts" id="wireArch"><button class="opt" onclick="pick(this,'wireArch')">▲ Upper</button><button class="opt" onclick="pick(this,'wireArch')">▼ Lower</button><button class="opt" onclick="pick(this,'wireArch')">▲▼ Both</button></div></div>
+                <div class="field-row"><div class="field-label">Status</div><div class="field-opts" id="wireStatus"><button class="opt" onclick="pick(this,'wireStatus')">New</button><button class="opt" onclick="pick(this,'wireStatus')">Continue</button><button class="opt" onclick="pick(this,'wireStatus')">Remove</button><button class="opt" onclick="pick(this,'wireStatus')">Replace</button></div></div>
+                <div class="field-row"><div class="field-label">Size</div><div class="field-opts" id="wireSize"><button class="opt" onclick="pick(this,'wireSize')">12</button><button class="opt" onclick="pick(this,'wireSize')">14</button><button class="opt" onclick="pick(this,'wireSize')">16</button><button class="opt" onclick="pick(this,'wireSize')">18</button><button class="opt" onclick="pick(this,'wireSize')">16×16</button><button class="opt" onclick="pick(this,'wireSize')">16×22</button><button class="opt" onclick="pick(this,'wireSize')">17×25</button><button class="opt" onclick="pick(this,'wireSize')">19×25</button><button class="opt" onclick="pick(this,'wireSize')">16×25</button><button class="opt" onclick="pick(this,'wireSize')">21×25</button></div></div>
+                <div class="field-row"><div class="field-label">Material</div><div class="field-opts" id="wireMaterial"><button class="opt" onclick="pick(this,'wireMaterial')">NiTi</button><button class="opt" onclick="pick(this,'wireMaterial')">SS</button><button class="opt" onclick="pick(this,'wireMaterial')">TMA</button></div></div>
+                <div class="field-row"><div class="field-label">Type</div><div class="type-scroll-wrap"><div class="type-scroll" id="wireType"><button class="opt" onclick="pick(this,'wireType')">Plain</button><button class="opt" onclick="pick(this,'wireType')">T-loop</button><button class="opt" onclick="pick(this,'wireType')">Reverse curve</button><button class="opt" onclick="pick(this,'wireType')">Accentuated curve</button><button class="opt" onclick="pick(this,'wireType')">Expand</button><button class="opt" onclick="pick(this,'wireType')">Narrow</button><button class="opt" onclick="pick(this,'wireType')">Retraction hooks</button><button class="opt" onclick="pick(this,'wireType')">Heat treated</button></div></div></div>
+                <div class="field-row"><div class="field-label">Where</div><div class="field-opts" id="wireWhere"><button class="opt" onclick="pick(this,'wireWhere')">2–2</button><button class="opt" onclick="pick(this,'wireWhere')">5–5</button><button class="opt" onclick="pick(this,'wireWhere')">6–6</button><button class="opt" onclick="pick(this,'wireWhere')">7–7</button><button class="opt" onclick="pick(this,'wireWhere')">Select tooth</button></div></div>
+                <div class="field-row"><div class="field-label">Ext. to</div><div class="field-opts" id="wireExt"><button class="opt" onclick="pick(this,'wireExt')">—</button><button class="opt" onclick="pick(this,'wireExt')">Ext 6s</button><button class="opt" onclick="pick(this,'wireExt')">Ext 7s</button><button class="opt" onclick="pick(this,'wireExt')">Ext 8s</button></div></div>
+                <div class="toggle-row"><div class="toggle-label">CB-right</div><label class="toggle-switch"><input type="checkbox" id="cbRight" onchange="cbToggle('Right',this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label><div class="toggle-sub" id="cbRightSub"><button class="opt" onclick="pick(this,'cbRightMode')">Active</button><button class="opt" onclick="pick(this,'cbRightMode')">Passive</button></div></div>
+                <div class="toggle-row"><div class="toggle-label">CB-left</div><label class="toggle-switch"><input type="checkbox" id="cbLeft" onchange="cbToggle('Left',this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label><div class="toggle-sub" id="cbLeftSub"><button class="opt" onclick="pick(this,'cbLeftMode')">Active</button><button class="opt" onclick="pick(this,'cbLeftMode')">Passive</button></div></div>
+              </div>
+            </div>
+
+            <!-- AUXILIARIES -->
+            <div class="quadrant auxiliaries">
+              <div class="q-header"><div class="q-title"><div class="q-dot"></div>Auxiliaries</div><div class="q-status" id="aux-status">— not set</div></div>
+              <div class="q-tabs"><button class="q-tab active" onclick="qtab('aux','fav',this)">⭐ Favourite</button><button class="q-tab" onclick="qtab('aux','custom',this)">Custom</button></div>
+              <div id="aux-fav" class="panel fav-list">
+                <div class="fav-item" onclick="fav(this,'aux','PC upper L2–R7 · PC lower 6–6 · LEL lower 4–6')"><span class="fav-star">⭐</span><span class="fav-label">PC upper L2–R7 · PC lower 6–6 · LEL lower 4–6</span></div>
+                <div class="fav-item" onclick="fav(this,'aux','Reverse go-between lower 4–6 Ext 7s · PC lower 6–6')"><span class="fav-star">⭐</span><span class="fav-label">Reverse go-between lower 4–6 Ext 7s · PC lower 6–6</span></div>
+                <div class="fav-item" onclick="fav(this,'aux','K hook upper 3s · Retraction spring · Bond')"><span class="fav-star">⭐</span><span class="fav-label">K hook upper 3s · Retraction spring · Bond</span></div>
+              </div>
+              <div id="aux-custom" class="panel hidden q-body">
+                <div class="sec-label">Ligation</div>
+                <div class="aux-item" onclick="auxToggle(this,'Single tie — Upper')"><div class="aux-chk">✓</div><div class="aux-name">Single Tie</div><div class="aux-cat">Upper</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Power chain — Upper')"><div class="aux-chk">✓</div><div class="aux-name">Power Chain</div><div class="aux-cat">Upper</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Single tie — Lower')"><div class="aux-chk">✓</div><div class="aux-name">Single Tie</div><div class="aux-cat">Lower</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Power chain — Lower')"><div class="aux-chk">✓</div><div class="aux-name">Power Chain</div><div class="aux-cat">Lower</div></div>
+                <div class="sec-label">Auxiliaries</div>
+                <div class="aux-item" onclick="auxToggle(this,'Wire tie')"><div class="aux-chk">✓</div><div class="aux-name">Wire Tie</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'K hook')"><div class="aux-chk">✓</div><div class="aux-name">K Hook</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Rotation wedge')"><div class="aux-chk">✓</div><div class="aux-name">Rotation Wedge</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'OCS')"><div class="aux-chk">✓</div><div class="aux-name">OCS</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'CCS')"><div class="aux-chk">✓</div><div class="aux-name">CCS</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Retraction spring')"><div class="aux-chk">✓</div><div class="aux-name">Retraction Spring</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'Torquing spring')"><div class="aux-chk">✓</div><div class="aux-name">Torquing Spring</div><div class="aux-cat">Aux</div></div>
+                <div class="aux-item" onclick="auxToggle(this,'LEL')"><div class="aux-chk">✓</div><div class="aux-name">LEL (Lingual Elastic Loop)</div><div class="aux-cat">Aux</div></div>
+                <div class="sec-label">Go-Between</div>
+                <div class="field-opts" id="goBetween" style="margin-bottom:7px;"><button class="opt" onclick="pick(this,'goBetween')">None</button><button class="opt" onclick="pick(this,'goBetween')">Reverse — Upper</button><button class="opt" onclick="pick(this,'goBetween')">Reverse — Lower</button><button class="opt" onclick="pick(this,'goBetween')">Regular — Upper</button><button class="opt" onclick="pick(this,'goBetween')">Regular — Lower</button></div>
+                <div class="sec-label">Bond / Band</div>
+                <div class="field-opts" id="bondBand" style="margin-bottom:7px;"><button class="opt" onclick="pick(this,'bondBand')">Bond</button><button class="opt" onclick="pick(this,'bondBand')">Band</button><button class="opt" onclick="pick(this,'bondBand')">Rebond</button></div>
+                <div class="sec-label">Bite Guard</div>
+                <div class="field-opts" id="biteGuard"><button class="opt" onclick="pick(this,'biteGuard')">Bite Pillow</button><button class="opt" onclick="pick(this,'biteGuard')">Bite Turbo</button><button class="opt" onclick="pick(this,'biteGuard')">Bite Ramp</button><button class="opt" onclick="pick(this,'biteGuard')">Remove</button></div>
+              </div>
+            </div>
+
+            <!-- ELASTICS -->
+            <div class="quadrant elastics">
+              <div class="q-header"><div class="q-title"><div class="q-dot"></div>Elastics</div><div class="q-status" id="elastic-status">— not set</div></div>
+              <div class="q-tabs"><button class="q-tab active" onclick="qtab('elastic','fav',this)">⭐ Favourite</button><button class="q-tab" onclick="qtab('elastic','custom',this)">Custom</button></div>
+              <div id="elastic-fav" class="panel fav-list">
+                <div class="fav-item" onclick="fav(this,'elastic','Class II · R: U3–L7 Size 1 Heavy · L: U3–L6 Size 1 Medium')"><span class="fav-star">⭐</span><span class="fav-label">Class II · R: U3–L7 Size 1 Heavy · L: U3–L6 Size 1 Medium</span></div>
+                <div class="fav-item" onclick="fav(this,'elastic','Class II · Both sides U3–L6 Light')"><span class="fav-star">⭐</span><span class="fav-label">Class II · Both sides U3–L6 Light</span></div>
+                <div class="fav-item" onclick="fav(this,'elastic','Class III · R: U5–L3 Medium · L: U5–L3 Medium')"><span class="fav-star">⭐</span><span class="fav-label">Class III · R: U5–L3 Medium · L: U5–L3 Medium</span></div>
+              </div>
+              <div id="elastic-custom" class="panel hidden q-body">
+                <div class="field-row"><div class="field-label">Class</div><div class="field-opts" id="elasticClass"><button class="opt" onclick="pick(this,'elasticClass')">None</button><button class="opt" onclick="pick(this,'elasticClass')">Class I</button><button class="opt" onclick="pick(this,'elasticClass')">Class II</button><button class="opt" onclick="pick(this,'elasticClass')">Class III</button></div></div>
+                <div class="elastic-card">
+                  <div class="elastic-card-title">→ Right Side</div>
+                  <div class="e-row"><div class="e-lbl">Upper</div><div class="e-opts" id="eRU"><button class="opt" onclick="pick(this,'eRU')">2</button><button class="opt" onclick="pick(this,'eRU')">3</button><button class="opt" onclick="pick(this,'eRU')">4</button><button class="opt" onclick="pick(this,'eRU')">5</button><button class="opt" onclick="pick(this,'eRU')">6</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Lower</div><div class="e-opts" id="eRL"><button class="opt" onclick="pick(this,'eRL')">4</button><button class="opt" onclick="pick(this,'eRL')">5</button><button class="opt" onclick="pick(this,'eRL')">6</button><button class="opt" onclick="pick(this,'eRL')">7</button><button class="opt" onclick="pick(this,'eRL')">8</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Size</div><div class="e-opts" id="eRS"><button class="opt" onclick="pick(this,'eRS')">Size 1</button><button class="opt" onclick="pick(this,'eRS')">Size 2</button><button class="opt" onclick="pick(this,'eRS')">3/16"</button><button class="opt" onclick="pick(this,'eRS')">¼"</button><button class="opt" onclick="pick(this,'eRS')">5/16"</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Force</div><div class="e-opts" id="eRF"><button class="opt" onclick="pick(this,'eRF')">Light</button><button class="opt" onclick="pick(this,'eRF')">Medium</button><button class="opt" onclick="pick(this,'eRF')">Heavy</button></div></div>
+                </div>
+                <div class="elastic-card">
+                  <div class="elastic-card-title">← Left Side</div>
+                  <div class="e-row"><div class="e-lbl">Upper</div><div class="e-opts" id="eLU"><button class="opt" onclick="pick(this,'eLU')">2</button><button class="opt" onclick="pick(this,'eLU')">3</button><button class="opt" onclick="pick(this,'eLU')">4</button><button class="opt" onclick="pick(this,'eLU')">5</button><button class="opt" onclick="pick(this,'eLU')">6</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Lower</div><div class="e-opts" id="eLL"><button class="opt" onclick="pick(this,'eLL')">4</button><button class="opt" onclick="pick(this,'eLL')">5</button><button class="opt" onclick="pick(this,'eLL')">6</button><button class="opt" onclick="pick(this,'eLL')">7</button><button class="opt" onclick="pick(this,'eLL')">8</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Size</div><div class="e-opts" id="eLS"><button class="opt" onclick="pick(this,'eLS')">Size 1</button><button class="opt" onclick="pick(this,'eLS')">Size 2</button><button class="opt" onclick="pick(this,'eLS')">3/16"</button><button class="opt" onclick="pick(this,'eLS')">¼"</button><button class="opt" onclick="pick(this,'eLS')">5/16"</button></div></div>
+                  <div class="e-row"><div class="e-lbl">Force</div><div class="e-opts" id="eLF"><button class="opt" onclick="pick(this,'eLF')">Light</button><button class="opt" onclick="pick(this,'eLF')">Medium</button><button class="opt" onclick="pick(this,'eLF')">Heavy</button></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- INSTRUCTIONS -->
+            <div class="quadrant instructions">
+              <div class="q-header"><div class="q-title"><div class="q-dot"></div>Instructions</div><div class="q-status" id="instr-status">— not set</div></div>
+              <div class="q-tabs"><button class="q-tab active" onclick="qtab('instr','fav',this)">⭐ Favourite</button><button class="q-tab" onclick="qtab('instr','custom',this)">Custom</button></div>
+              <div id="instr-fav" class="panel fav-list">
+                <div class="fav-item" onclick="fav(this,'instr','Oralizing + Tongue exercises + Recall 6 wks')"><span class="fav-star">⭐</span><span class="fav-label">Oralizing + Tongue exercises + Recall 6 wks</span></div>
+                <div class="fav-item" onclick="fav(this,'instr','Hygiene reinforcement + Fluoride + Recall 4 wks')"><span class="fav-star">⭐</span><span class="fav-label">Hygiene reinforcement + Fluoride + Recall 4 wks</span></div>
+                <div class="fav-item" onclick="fav(this,'instr','Pain medication + Oralizing + Recall 4 wks')"><span class="fav-star">⭐</span><span class="fav-label">Pain medication + Oralizing + Recall 4 wks</span></div>
+              </div>
+              <div id="instr-custom" class="panel hidden q-body">
+                <div class="sec-label">Patient Instructions</div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">🦷</div><div class="instr-name">Oralizing Instructions</div><div class="instr-chk">✓</div></div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">👅</div><div class="instr-name">Tongue Exercises</div><div class="instr-chk">✓</div></div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">🧴</div><div class="instr-name">Fluoride Application</div><div class="instr-chk">✓</div></div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">📋</div><div class="instr-name">Hygiene Reinforcement</div><div class="instr-chk">✓</div></div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">💊</div><div class="instr-name">Pain Medication Advised</div><div class="instr-chk">✓</div></div>
+                <div class="instr-item" onclick="instrToggle(this)"><div class="instr-icon">⚠️</div><div class="instr-name">Breakage — Rebond</div><div class="instr-chk">✓</div></div>
+                <div class="sec-label">Recall</div>
+                <div class="field-opts" id="recallWeeks"><button class="opt" onclick="pick(this,'recallWeeks')">4 weeks</button><button class="opt" onclick="pick(this,'recallWeeks')">6 weeks</button><button class="opt" onclick="pick(this,'recallWeeks')">8 weeks</button><button class="opt" onclick="pick(this,'recallWeeks')">10 weeks</button><button class="opt" onclick="pick(this,'recallWeeks')">12 weeks</button></div>
+                <div class="sec-label">Notes</div>
+                <textarea class="notes" placeholder="Additional notes..."></textarea>
+              </div>
+            </div>
+
+          </div><!-- /quad-grid -->
+
+          <!-- ══ TOOTH CHART ══ -->
+          <div class="tooth-chart-section">
+            <div class="tc-header">
+              <div class="tc-title">🦷 Live Treatment Chart</div>
+              <div class="tc-legend">
+                <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#2563eb;"></div>Wire</div>
+                <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#F9AC42;height:3px;border-radius:2px;background:repeating-linear-gradient(90deg,#F9AC42 0,#F9AC42 3px,transparent 3px,transparent 7px);"></div>Power Chain</div>
+                <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#dc2626;"></div>Elastic</div>
+                <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#7c3aed;"></div>Aux</div>
+                <div class="tc-legend-item"><div class="tc-legend-dot" style="background:#dc2626; width:7px; height:7px; border-radius:50%;"></div>Broken</div>
+              </div>
+            </div>
+            <div class="tc-body">
+              <div class="tc-arch-label">Upper Arch — R</div>
+              <!-- SVG Tooth Chart -->
+              <svg id="toothChartSVG" width="100%" height="200" viewBox="0 0 680 200" style="display:block;overflow:visible;">
+
+                <!-- Upper arch teeth: R8-R1, L1-L8 -->
+                <!-- positions: tooth width=30, gap=4, start x=20 -->
+                <!-- R side: 8,7,6,5,4,3,2,1 then midline then 1,2,3,4,5,6,7,8 L side -->
+
+                <!-- Upper row (y=10 to y=55) -->
+                <!-- R8 -->
+                <g class="tooth-g" id="ut-R8">
+                  <rect x="14" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/>
+                  <text x="28" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">8</text>
+                  <text x="28" y="68" text-anchor="middle" font-size="8" fill="#aaa" font-family="Montserrat">R</text>
+                </g>
+                <g class="tooth-g" id="ut-R7"><rect x="46" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="60" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">7</text></g>
+                <g class="tooth-g" id="ut-R6"><rect x="78" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="92" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">6</text></g>
+                <g class="tooth-g" id="ut-R5"><rect x="110" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="124" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">5</text></g>
+                <g class="tooth-g" id="ut-R4"><rect x="142" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="156" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">4</text></g>
+                <g class="tooth-g" id="ut-R3"><rect x="174" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="188" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">3</text></g>
+                <g class="tooth-g" id="ut-R2"><rect x="206" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="220" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">2</text></g>
+                <g class="tooth-g" id="ut-R1"><rect x="238" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="252" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">1</text></g>
+                <!-- midline -->
+                <line x1="340" y1="5" x2="340" y2="75" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,2"/>
+                <g class="tooth-g" id="ut-L1"><rect x="270" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="284" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">1</text></g>
+                <g class="tooth-g" id="ut-L2"><rect x="302" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="316" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">2</text></g>
+                <g class="tooth-g" id="ut-L3"><rect x="334" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="348" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">3</text></g>
+                <g class="tooth-g" id="ut-L4"><rect x="366" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="380" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">4</text></g>
+                <g class="tooth-g" id="ut-L5"><rect x="398" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="412" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">5</text></g>
+                <g class="tooth-g" id="ut-L6"><rect x="430" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="444" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">6</text></g>
+                <g class="tooth-g" id="ut-L7"><rect x="462" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="476" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">7</text></g>
+                <g class="tooth-g" id="ut-L8"><rect x="494" y="8" width="28" height="40" rx="4" ry="7" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="508" y="58" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">8</text>
+                  <text x="508" y="68" text-anchor="middle" font-size="8" fill="#aaa" font-family="Montserrat">L</text>
+                </g>
+
+                <!-- Lower arch teeth (y=130 to y=175) -->
+                <g class="tooth-g" id="lt-R8"><rect x="14" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="28" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">8</text><text x="28" y="116" text-anchor="middle" font-size="8" fill="#aaa" font-family="Montserrat">R</text></g>
+                <g class="tooth-g" id="lt-R7"><rect x="46" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="60" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">7</text></g>
+                <g class="tooth-g" id="lt-R6"><rect x="78" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="92" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">6</text></g>
+                <g class="tooth-g" id="lt-R5"><rect x="110" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="124" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">5</text></g>
+                <g class="tooth-g" id="lt-R4"><rect x="142" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="156" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">4</text></g>
+                <g class="tooth-g" id="lt-R3"><rect x="174" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="188" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">3</text></g>
+                <g class="tooth-g" id="lt-R2"><rect x="206" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="220" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">2</text></g>
+                <g class="tooth-g" id="lt-R1"><rect x="238" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="252" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">1</text></g>
+                <line x1="340" y1="115" x2="340" y2="185" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,2"/>
+                <g class="tooth-g" id="lt-L1"><rect x="270" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="284" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">1</text></g>
+                <g class="tooth-g" id="lt-L2"><rect x="302" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="316" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">2</text></g>
+                <g class="tooth-g" id="lt-L3"><rect x="334" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="348" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">3</text></g>
+                <g class="tooth-g" id="lt-L4"><rect x="366" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="380" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">4</text></g>
+                <g class="tooth-g" id="lt-L5"><rect x="398" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="412" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">5</text></g>
+                <g class="tooth-g" id="lt-L6"><rect x="430" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="444" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">6</text></g>
+                <g class="tooth-g" id="lt-L7"><rect x="462" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="476" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">7</text></g>
+                <g class="tooth-g" id="lt-L8"><rect x="494" y="130" width="28" height="40" rx="7" ry="4" fill="#fdf9f0" stroke="#ccc" stroke-width="1.5" class="tc-tooth"/><text x="508" y="125" text-anchor="middle" font-size="9" fill="#888" font-family="Montserrat">8</text><text x="508" y="116" text-anchor="middle" font-size="8" fill="#aaa" font-family="Montserrat">L</text></g>
+
+                <!-- Dynamic overlays group -->
+                <g id="chart-overlays"></g>
+
+                <!-- R / L labels -->
+                <text x="555" y="32" font-size="11" fill="#888" font-family="Montserrat" font-weight="600">UPPER</text>
+                <text x="555" y="155" font-size="11" fill="#888" font-family="Montserrat" font-weight="600">LOWER</text>
+                <!-- occlusal line -->
+                <line x1="12" y1="90" x2="530" y2="90" stroke="#e8e8e8" stroke-width="1.5"/>
+                <line x1="12" y1="118" x2="530" y2="118" stroke="#e8e8e8" stroke-width="1.5"/>
+                <text x="540" y="108" font-size="9" fill="#ccc" font-family="Montserrat">←occ</text>
+
+              </svg>
+            </div>
+          </div>
+
+        </div><!-- /tab-braces -->
+
+        <!-- ══ APPLIANCE TAB ══ -->
+        <div class="tab-page" id="tab-appliance">
+          <div class="appl-page">
+            <div class="active-appl-card">
+              <div class="active-appl-header"><div><div class="active-appl-title">Currently Active Appliances</div><div style="font-size:10px;color:var(--text-muted);margin-top:2px;">Tap to log this visit</div></div><div class="active-appl-badge">2 active</div></div>
+              <div class="active-appl-list">
+                <div class="active-appl-pill" onclick="openApplLog(this,'Herbst Appliance','Placed: 12 Jan 2026 · Month 2 of 15')"><div class="appl-pill-icon">🦾</div><div><div class="appl-pill-name">Herbst Appliance</div><div class="appl-pill-detail">Month 2 of 15</div></div></div>
+                <div class="active-appl-pill" onclick="openApplLog(this,'RPE / Hyrax','Placed: 20 Dec 2025 · 18 turns done')"><div class="appl-pill-icon">🔩</div><div><div class="appl-pill-name">RPE / Hyrax</div><div class="appl-pill-detail">18 turns done</div></div></div>
+                <div class="active-appl-pill" style="border-style:dashed;opacity:0.6;"><div class="appl-pill-icon">＋</div><div><div class="appl-pill-name" style="color:var(--text-muted);font-size:11px;">Add new</div></div></div>
+              </div>
+            </div>
+            <div class="appl-visit-log" id="applVisitLog">
+              <button class="appl-log-close" onclick="closeApplLog()">✕</button>
+              <div class="appl-log-title" id="applLogTitle">Herbst — Visit Log</div>
+              <div class="appl-log-sub" id="applLogSub">Placed: 12 Jan 2026</div>
+              <div class="appl-log-grid">
+                <div>
+                  <div class="sec-label" style="border-top:none;padding-top:0;margin-top:0;">Action</div>
+                  <div class="field-opts" id="applAction" style="margin-bottom:10px;"><button class="opt" onclick="pick(this,'applAction')">Check only</button><button class="opt" onclick="pick(this,'applAction')">Activate</button><button class="opt" onclick="pick(this,'applAction')">Repair</button><button class="opt" onclick="pick(this,'applAction')">Remove</button><button class="opt" onclick="pick(this,'applAction')">Re-cement</button></div>
+                  <div class="sec-label">Compliance</div>
+                  <div class="field-opts" id="applCompliance"><button class="opt" onclick="pick(this,'applCompliance')">Excellent</button><button class="opt" onclick="pick(this,'applCompliance')">Good</button><button class="opt" onclick="pick(this,'applCompliance')">Fair</button><button class="opt" onclick="pick(this,'applCompliance')">Poor</button></div>
+                </div>
+                <div>
+                  <div class="sec-label" style="border-top:none;padding-top:0;margin-top:0;">Notes</div>
+                  <textarea class="notes" style="height:80px;" placeholder="Visit notes..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="new-appl-section">
+              <div class="new-appl-header"><div class="new-appl-title">Place New Appliance</div></div>
+              <div class="new-appl-body">
+                <div class="appl-cat-tabs">
+                  <button class="appl-cat-tab active" onclick="setApplCat('expansion',this)">🔩 Expansion</button>
+                  <button class="appl-cat-tab" onclick="setApplCat('functional',this)">🦾 Functional</button>
+                  <button class="appl-cat-tab" onclick="setApplCat('anchorage',this)">⚓ Anchorage</button>
+                  <button class="appl-cat-tab" onclick="setApplCat('space',this)">📐 Space Mgmt</button>
+                  <button class="appl-cat-tab" onclick="setApplCat('headgear',this)">🪖 Headgear</button>
+                  <button class="appl-cat-tab" onclick="setApplCat('separators',this)">⬤ Separators</button>
+                </div>
+                <div id="appl-expansion" class="appl-opt-grid">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'RPE / Hyrax')"><div class="appl-opt-icon">🔩</div><div class="appl-opt-name">RPE / Hyrax</div><div class="appl-opt-desc">Rapid palatal expander. Key-activated.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Quad Helix')"><div class="appl-opt-icon">〰️</div><div class="appl-opt-name">Quad Helix</div><div class="appl-opt-desc">Fixed spring. Slow upper arch expansion.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Schwarz')"><div class="appl-opt-icon">🔄</div><div class="appl-opt-name">Schwarz</div><div class="appl-opt-desc">Removable. Stimulates arch width.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Bonded Upper Expander')"><div class="appl-opt-icon">🦷</div><div class="appl-opt-name">Bonded Expander</div><div class="appl-opt-desc">Fixed acrylic with palatal screw.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Transpalatal Arch')"><div class="appl-opt-icon">↔️</div><div class="appl-opt-name">TPA</div><div class="appl-opt-desc">Passive. Anchorage and width maintenance.</div></div>
+                </div>
+                <div id="appl-functional" class="appl-opt-grid" style="display:none;">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Herbst')"><div class="appl-opt-icon">🦾</div><div class="appl-opt-name">Herbst</div><div class="appl-opt-desc">Fixed. Class II correction. 12–15 months.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Forsus')"><div class="appl-opt-icon">🔧</div><div class="appl-opt-name">Forsus</div><div class="appl-opt-desc">Fixed spring. Overbite correction.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Twin Block')"><div class="appl-opt-icon">🧩</div><div class="appl-opt-name">Twin Block</div><div class="appl-opt-desc">Removable. Mandibular advancement.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Carriere Distalizer')"><div class="appl-opt-icon">🎯</div><div class="appl-opt-name">Carriere</div><div class="appl-opt-desc">Non-extraction Class II correction.</div></div>
+                </div>
+                <div id="appl-anchorage" class="appl-opt-grid" style="display:none;">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'TAD / Mini-screw')"><div class="appl-opt-icon">🔩</div><div class="appl-opt-name">TAD / Mini-screw</div><div class="appl-opt-desc">Titanium temporary anchorage.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Nance Arch')"><div class="appl-opt-icon">⚓</div><div class="appl-opt-name">Nance Arch</div><div class="appl-opt-desc">Upper passive. Molar anchorage.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Lingual Arch')"><div class="appl-opt-icon">➰</div><div class="appl-opt-name">Lingual Arch</div><div class="appl-opt-desc">Fixed. Anchorage control.</div></div>
+                </div>
+                <div id="appl-space" class="appl-opt-grid" style="display:none;">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Fixed Space Maintainer')"><div class="appl-opt-icon">📐</div><div class="appl-opt-name">Fixed Maintainer</div><div class="appl-opt-desc">Paediatric. After early tooth loss.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Palatal Crib')"><div class="appl-opt-icon">🚧</div><div class="appl-opt-name">Palatal Crib</div><div class="appl-opt-desc">Habit-breaking. Thumb-sucking.</div></div>
+                </div>
+                <div id="appl-headgear" class="appl-opt-grid" style="display:none;">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Headgear — High Pull')"><div class="appl-opt-icon">🪖</div><div class="appl-opt-name">High Pull</div><div class="appl-opt-desc">Open bite. Intrudes upper molars.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Headgear — Low Pull')"><div class="appl-opt-icon">🪖</div><div class="appl-opt-name">Low Pull</div><div class="appl-opt-desc">Deep bite. Extrudes upper molars.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Facemask')"><div class="appl-opt-icon">😷</div><div class="appl-opt-name">Facemask</div><div class="appl-opt-desc">Reverse pull. Underbite correction.</div></div>
+                </div>
+                <div id="appl-separators" class="appl-opt-grid" style="display:none;">
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Rubber Separators')"><div class="appl-opt-icon">⬤</div><div class="appl-opt-name">Rubber Separators</div><div class="appl-opt-desc">Pre-banding. Between molars.</div></div>
+                  <div class="appl-opt-card" onclick="selectAppl(this,'Spring Separators')"><div class="appl-opt-icon">🌀</div><div class="appl-opt-name">Spring Separators</div><div class="appl-opt-desc">Metal spring alternative.</div></div>
+                </div>
+                <div class="appl-detail-panel" id="applDetailPanel">
+                  <div class="appl-detail-title" id="applDetailTitle">New Appliance Details</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div>
+                      <div class="sec-label" style="border-top:none;padding-top:0;margin-top:0;">Arch</div>
+                      <div class="field-opts" id="newApplArch" style="margin-bottom:8px;"><button class="opt" onclick="pick(this,'newApplArch')">Upper</button><button class="opt" onclick="pick(this,'newApplArch')">Lower</button><button class="opt" onclick="pick(this,'newApplArch')">Both</button></div>
+                      <div class="sec-label">Status</div>
+                      <div class="field-opts" id="newApplStatus"><button class="opt" onclick="pick(this,'newApplStatus')">Place today</button><button class="opt" onclick="pick(this,'newApplStatus')">Already active</button><button class="opt" onclick="pick(this,'newApplStatus')">Remove today</button></div>
+                    </div>
+                    <div>
+                      <div class="sec-label" style="border-top:none;padding-top:0;margin-top:0;">Notes</div>
+                      <textarea class="notes" style="height:68px;" placeholder="Placement notes..."></textarea>
+                      <button class="btn-apply" onclick="addAppliance()" style="width:100%;margin-top:8px;padding:8px;">Add to Active ＋</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Placeholder tabs -->
+        <div class="tab-page" id="tab-instructions"><div class="placeholder-page"><div class="placeholder-icon">📋</div><div class="placeholder-title">Instructions</div><div class="placeholder-sub">Patient instruction logging</div></div></div>
+        <div class="tab-page" id="tab-records"><div class="placeholder-page"><div class="placeholder-icon">🗂️</div><div class="placeholder-title">Records</div><div class="placeholder-sub">X-rays, photos, scans</div></div></div>
+        <div class="tab-page" id="tab-referrals"><div class="placeholder-page"><div class="placeholder-icon">📤</div><div class="placeholder-title">Referrals</div><div class="placeholder-sub">Specialist referrals</div></div></div>
+        <div class="tab-page" id="tab-retainers"><div class="placeholder-page"><div class="placeholder-icon">🛡️</div><div class="placeholder-title">Retainers</div><div class="placeholder-sub">Retention phase</div></div></div>
+        <div class="tab-page" id="tab-sos"><div class="placeholder-page"><div class="placeholder-icon">🚨</div><div class="placeholder-title">SOS</div><div class="placeholder-sub">Emergency visit capture</div></div></div>
+
+      </div>
+    </div><!-- /main-panel -->
+
+    <!-- Right panel -->
+    <div class="right-panel">
+      <div class="rp-title">To do list</div>
+      <div class="rp-section">Today's TX activities</div>
+
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">New | 17×25 | TMA | Active CB-Left | Active CB-right | Accentuated curve | 5–5</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">New | 17×25 | TMA | Active CB-Left | Active CB-right | Accentuated curve | 5–5</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Upper arch wire</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">New | 12 | SS | Plain | UR6-UL7 | Lower wire</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Lower arch wire</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">New | 12 | N | Heat treated | LR6-LL7 | Passive CB-R | Passive CB-L</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Upper ligation — Single Tie</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">Regular | R7–L7</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Lower ligation — Single Tie</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">Cross | R4, R5, L4, L5</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Power Chain</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">Regular | R3–L3 | Buccal</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Auxiliaries — Wire TIE</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">LR3 | LL3</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">OCS</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">UR1–UR3 | +7</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Bond</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">Bracket | Rebond | Buccal | 5mm | Upside down 18 | Slot MBT | Direct | UR3</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+
+      <div class="rp-subsection">Bite guard — Bite Pillow</div>
+      <div class="rp-item">
+        <div class="rp-item-icon">⊗</div>
+        <div class="rp-item-text">Add | UR6 | UL6</div>
+        <div class="rp-item-check" onclick="this.classList.toggle('done');this.textContent=this.classList.contains('done')?'✓':''"></div>
+      </div>
+    </div>
+
+  </div><!-- /content-row -->
+</div><!-- /app-body -->
+
+<!-- Voice Panel -->
+<div class="voice-panel" id="voicePanel">
+  <div class="vp-header">
+    <div class="vp-title">
+      🎙️ Voice Entry
+      <div class="mic-wave" id="micWave"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="vp-status" id="vpStatus">Ready — tap mic to begin</div>
+      <button class="vp-close" onclick="closeVoice()">✕ Close</button>
+    </div>
+  </div>
+  <div class="vp-body">
+    <div class="vp-left">
+      <div class="vp-section-label">🎤 Doctor's Dictation</div>
+      <div class="vp-transcript" id="vpTranscript"><span class="interim">Tap the microphone and speak — e.g. "new nineteen twenty-five stainless steel upper and lower extended to sevens, power chain lower, class two elastics, oralizing instructions recall six weeks"</span></div>
+      <div class="vp-hint" style="margin-top:10px;">
+        Try: <strong>"new wire nineteen twenty-five SS both extended to sevens"</strong> · <strong>"power chain lower six to six"</strong> · <strong>"class two elastics heavy"</strong> · <strong>"oralizing recall six weeks"</strong>
+      </div>
+    </div>
+    <div class="vp-right">
+      <div class="vp-section-label">✨ Detected — tap individual items or Apply All</div>
+      <div class="vp-parsed" id="vpParsed"><div style="font-size:11px;color:var(--text-muted);font-style:italic;">Parsed entries will appear here as you speak...</div></div>
+      <div style="margin-top:12px;"><button class="btn-apply" id="vpApplyAll" onclick="applyAllParsed()" style="width:100%;padding:9px;display:none;">Apply All to Treatment Card ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Summary bar -->
+<div class="summary-bar">
+  <div class="sum-label">Current Entry</div>
+  <div class="sum-text" id="sumText">— select a favourite or tap Custom to begin entry</div>
+  <button class="btn-clr" onclick="clearAll()">Clear</button>
+  <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()" title="Voice entry — click to open, then tap mic to speak">🎙️</button>
+  <button class="btn-save" onclick="saveVisit()">Save Visit ✓</button>
+</div>
+
+<script>
+// ── Tooth chart positions (x centre of each tooth) ──
+const TOOTH_POS = {
+  'ut-R8':28,'ut-R7':60,'ut-R6':92,'ut-R5':124,'ut-R4':156,'ut-R3':188,'ut-R2':220,'ut-R1':252,
+  'ut-L1':284,'ut-L2':316,'ut-L3':348,'ut-L4':380,'ut-L5':412,'ut-L6':444,'ut-L7':476,'ut-L8':508,
+  'lt-R8':28,'lt-R7':60,'lt-R6':92,'lt-R5':124,'lt-R4':156,'lt-R3':188,'lt-R2':220,'lt-R1':252,
+  'lt-L1':284,'lt-L2':316,'lt-L3':348,'lt-L4':380,'lt-L5':412,'lt-L6':444,'lt-L7':476,'lt-L8':508
+};
+// tooth number to position index (R8=0...R1=7, L1=8...L8=15)
+function toothX(arch, side, num) {
+  const key = (arch==='u'?'ut-':'lt-') + side + num;
+  return TOOTH_POS[key] || 0;
+}
+
+// State
+const S = {
+  wireArch:null,wireStatus:null,wireSize:null,wireMaterial:null,wireType:null,wireWhere:null,wireExt:null,
+  cbRightMode:null,cbLeftMode:null,goBetween:null,bondBand:null,biteGuard:null,
+  elasticClass:null,eRU:null,eRL:null,eRS:null,eRF:null,eLU:null,eLL:null,eLS:null,eLF:null,
+  recallWeeks:null,applAction:null,applCompliance:null,newApplArch:null,newApplStatus:null,
+  auxItems:[],instrItems:[],
+  wireFav:null,auxFav:null,elasticFav:null,instrFav:null,loggedAppl:null,selectedAppl:null
+};
+
+function switchTab(name,el){
+  document.querySelectorAll('.tnav-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+}
+function qtab(q,mode,el){
+  el.closest('.q-tabs').querySelectorAll('.q-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(q+'-fav').classList.toggle('hidden',mode!=='fav');
+  document.getElementById(q+'-custom').classList.toggle('hidden',mode!=='custom');
+}
+function pick(el,group){
+  document.querySelectorAll('#'+group+' .opt').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel'); S[group]=el.textContent.trim(); refresh();
+}
+function fav(el,q,label){
+  el.closest('.fav-list').querySelectorAll('.fav-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected'); S[q+'Fav']=label; refresh();
+}
+function cbToggle(side,on){
+  const sub=document.getElementById('cb'+side+'Sub');
+  sub.classList.toggle('on',on);
+  if(!on){S['cb'+side.toLowerCase()+'Mode']=null;sub.querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));}
+  refresh();
+}
+function auxToggle(el,name){
+  el.classList.toggle('sel');
+  const chk=el.querySelector('.aux-chk');
+  if(el.classList.contains('sel')){S.auxItems.push(name);chk.style.cssText='background:#F9AC42;border-color:#F9AC42;color:white;';}
+  else{S.auxItems=S.auxItems.filter(x=>x!==name);chk.style.cssText='';}
+  refresh();
+}
+function instrToggle(el){
+  el.classList.toggle('sel');
+  const label=el.querySelector('.instr-name').textContent;
+  const chk=el.querySelector('.instr-chk');
+  if(el.classList.contains('sel')){S.instrItems.push(label);chk.style.cssText='background:#4caf50;border-color:#4caf50;color:white;';}
+  else{S.instrItems=S.instrItems.filter(x=>x!==label);chk.style.cssText='';}
+  refresh();
+}
+function openApplLog(el,name,detail){
+  document.querySelectorAll('.active-appl-pill').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('applLogTitle').textContent=name+' — Visit Log';
+  document.getElementById('applLogSub').textContent=detail;
+  document.getElementById('applVisitLog').classList.add('visible');
+  S.loggedAppl=name; refresh();
+}
+function closeApplLog(){
+  document.getElementById('applVisitLog').classList.remove('visible');
+  document.querySelectorAll('.active-appl-pill').forEach(p=>p.classList.remove('selected'));
+  S.loggedAppl=null; refresh();
+}
+function setApplCat(cat,el){
+  document.querySelectorAll('.appl-cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['expansion','functional','anchorage','space','headgear','separators'].forEach(c=>{
+    const e=document.getElementById('appl-'+c); if(e) e.style.display=c===cat?'grid':'none';
+  });
+  document.getElementById('applDetailPanel').classList.remove('visible');
+  document.querySelectorAll('.appl-opt-card').forEach(c=>c.classList.remove('sel'));
+}
+function selectAppl(el,name){
+  document.querySelectorAll('.appl-opt-card').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel'); S.selectedAppl=name;
+  document.getElementById('applDetailTitle').textContent=name;
+  document.getElementById('applDetailPanel').classList.add('visible');
+}
+function addAppliance(){
+  if(!S.selectedAppl)return;
+  const list=document.querySelector('.active-appl-list');
+  const badge=document.querySelector('.active-appl-badge');
+  const count=list.querySelectorAll('.active-appl-pill:not([style*="dashed"])').length;
+  badge.textContent=(count+1)+' active';
+  const pill=document.createElement('div');
+  pill.className='active-appl-pill';
+  pill.innerHTML='<div class="appl-pill-icon">🆕</div><div><div class="appl-pill-name">'+S.selectedAppl+'</div><div class="appl-pill-detail">Placed today</div></div>';
+  list.insertBefore(pill,list.lastElementChild);
+  document.getElementById('applDetailPanel').classList.remove('visible');
+  document.querySelectorAll('.appl-opt-card').forEach(c=>c.classList.remove('sel'));
+  S.selectedAppl=null; refresh();
+}
+
+// ── TOOTH CHART UPDATE ──────────────────────────────
+function updateToothChart(){
+  const svg=document.getElementById('chart-overlays');
+  svg.innerHTML='';
+
+  // Parse wire range
+  let wireFrom=null,wireTo=null,wireArch=null;
+  const wireLabel = S.wireFav || (S.wireSize?[S.wireStatus||'',S.wireSize,S.wireMaterial||'',S.wireArch||'',S.wireExt||''].join(' '):'');
+
+  // Determine arch
+  const arch = S.wireFav ? (S.wireFav.toLowerCase().includes('both')?'both':S.wireFav.toLowerCase().includes('lower')?'lower':'upper')
+    : (S.wireArch === '▲▼ Both' ? 'both' : S.wireArch === '▼ Lower' ? 'lower' : S.wireArch === '▲ Upper' ? 'upper' : null);
+
+  // Determine wire extent
+  const whereVal = S.wireWhere || (S.wireFav && S.wireFav.match(/(\d+)[–-](\d+)/)?.[0]);
+  const extVal = S.wireExt;
+
+  let wireStart=1,wireEnd=7;
+  if(whereVal){const m=String(whereVal).match(/(\d+)/g);if(m&&m.length>=2){wireStart=parseInt(m[0]);wireEnd=parseInt(m[m.length-1]);}}
+  if(extVal&&extVal.match(/\d/)){const m=extVal.match(/(\d+)/);if(m)wireEnd=parseInt(m[1]);}
+
+  // Draw wires
+  const drawWire=(archPrefix,y)=>{
+    // Right side: from R wireEnd to R1
+    const xStart=toothX(archPrefix,'R',Math.min(8,wireEnd))-14;
+    const xEnd=toothX(archPrefix,'L',Math.min(8,wireEnd))+14;
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x',xStart); rect.setAttribute('y',y);
+    rect.setAttribute('width',xEnd-xStart); rect.setAttribute('height',4);
+    rect.setAttribute('rx','2'); rect.setAttribute('fill','#2563eb');
+    rect.setAttribute('opacity','0.7');
+    svg.appendChild(rect);
+  };
+
+  if(arch==='upper'||arch==='both') drawWire('u',26);
+  if(arch==='lower'||arch==='both') drawWire('l',148);
+
+  // Power chain — check aux
+  const hasPCUpper = S.auxFav?.includes('PC upper') || S.auxItems.includes('Power chain — Upper');
+  const hasPCLower = S.auxFav?.includes('PC lower') || S.auxFav?.includes('lower 6–6') || S.auxItems.includes('Power chain — Lower');
+
+  const drawPC=(archPrefix,y,color='#F9AC42')=>{
+    // dashed chain line
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1','14'); line.setAttribute('y1',y);
+    line.setAttribute('x2','522'); line.setAttribute('y2',y);
+    line.setAttribute('stroke',color); line.setAttribute('stroke-width','4');
+    line.setAttribute('stroke-dasharray','6,4'); line.setAttribute('opacity','0.8');
+    svg.appendChild(line);
+  };
+  if(hasPCUpper) drawPC('u',19,'#F9AC42');
+  if(hasPCLower) drawPC('l',143,'#F9AC42');
+
+  // Elastics — draw diagonal lines
+  const elasticFavStr = S.elasticFav||'';
+  const hasElastic = S.elasticClass&&S.elasticClass!=='None' || elasticFavStr.includes('Class');
+
+  if(hasElastic){
+    // Right side elastic — U3 to L7 default or from state
+    const ruTooth = S.eRU || (elasticFavStr.match(/U(\d)/)?.[1]) || '3';
+    const rlTooth = S.eRL || (elasticFavStr.match(/L(\d)/)?.[1]) || '7';
+    const xUR = toothX('u','R',ruTooth);
+    const xLR = toothX('l','R',rlTooth);
+    const lineR=document.createElementNS('http://www.w3.org/2000/svg','line');
+    lineR.setAttribute('x1',xUR); lineR.setAttribute('y1',28);
+    lineR.setAttribute('x2',xLR); lineR.setAttribute('y2',130);
+    lineR.setAttribute('stroke','#dc2626'); lineR.setAttribute('stroke-width','2.5');
+    lineR.setAttribute('stroke-dasharray','5,3'); lineR.setAttribute('opacity','0.8');
+    svg.appendChild(lineR);
+
+    // Left side
+    const luTooth = S.eLU || (elasticFavStr.match(/U(\d)(?!.*U\d)/)?.[1]) || '3';
+    const llTooth = S.eLL || (elasticFavStr.match(/L(\d)(?!.*L\d)/)?.[1]) || '6';
+    const xUL = toothX('u','L',luTooth);
+    const xLL = toothX('l','L',llTooth);
+    const lineL=document.createElementNS('http://www.w3.org/2000/svg','line');
+    lineL.setAttribute('x1',xUL); lineL.setAttribute('y1',28);
+    lineL.setAttribute('x2',xLL); lineL.setAttribute('y2',130);
+    lineL.setAttribute('stroke','#dc2626'); lineL.setAttribute('stroke-width','2.5');
+    lineL.setAttribute('stroke-dasharray','5,3'); lineL.setAttribute('opacity','0.8');
+    svg.appendChild(lineL);
+
+    // Elastic labels
+    const eClass = S.elasticClass || (elasticFavStr.match(/Class (I+|II+|III+)/)?.[0]) || 'Elastic';
+    const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');
+    lbl.setAttribute('x','560'); lbl.setAttribute('y','80');
+    lbl.setAttribute('font-size','10'); lbl.setAttribute('fill','#dc2626');
+    lbl.setAttribute('font-family','Montserrat'); lbl.setAttribute('font-weight','600');
+    lbl.textContent=eClass;
+    svg.appendChild(lbl);
+  }
+
+  // LEL indicator
+  const hasLEL = S.auxItems.includes('LEL') || S.auxFav?.includes('LEL');
+  if(hasLEL){
+    const lelBar=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    lelBar.setAttribute('x','142'); lelBar.setAttribute('y','168');
+    lelBar.setAttribute('width','120'); lelBar.setAttribute('height','3');
+    lelBar.setAttribute('rx','1.5'); lelBar.setAttribute('fill','#7c3aed'); lelBar.setAttribute('opacity','0.8');
+    svg.appendChild(lelBar);
+    const lelLbl=document.createElementNS('http://www.w3.org/2000/svg','text');
+    lelLbl.setAttribute('x','156'); lelLbl.setAttribute('y','180');
+    lelLbl.setAttribute('font-size','8'); lelLbl.setAttribute('fill','#7c3aed');
+    lelLbl.setAttribute('font-family','Montserrat');
+    lelLbl.textContent='LEL';
+    svg.appendChild(lelLbl);
+  }
+}
+
+// ── Summary + refresh ──────────────────────────────
+function refresh(){
+  const parts=[];
+  let w=[];
+  if(S.wireFav){w.push(S.wireFav);}
+  else{if(S.wireStatus)w.push(S.wireStatus);if(S.wireSize)w.push(S.wireSize);if(S.wireMaterial)w.push(S.wireMaterial);if(S.wireArch)w.push(S.wireArch);if(S.wireType)w.push(S.wireType);if(S.wireWhere)w.push(S.wireWhere);if(S.wireExt&&S.wireExt!=='—')w.push(S.wireExt);if(document.getElementById('cbRight').checked)w.push('CB-R '+(S.cbRightMode||''));if(document.getElementById('cbLeft').checked)w.push('CB-L '+(S.cbLeftMode||''));}
+  if(w.length)parts.push('<span class="w">Wire: '+w.join(' | ')+'</span>');
+  let a=[];
+  if(S.auxFav){a.push(S.auxFav);}
+  else{if(S.auxItems.length)a.push(S.auxItems.join(', '));if(S.goBetween&&S.goBetween!=='None')a.push('Go-between: '+S.goBetween);if(S.bondBand)a.push(S.bondBand);if(S.biteGuard)a.push(S.biteGuard);}
+  if(a.length)parts.push('<span class="a">Aux: '+a.join(' · ')+'</span>');
+  let e=[];
+  if(S.elasticFav){e.push(S.elasticFav);}
+  else if(S.elasticClass&&S.elasticClass!=='None'){let es=S.elasticClass;if(S.eRU&&S.eRL)es+=' · R: U'+S.eRU+'–L'+S.eRL;if(S.eRF)es+=' '+S.eRF;if(S.eLU&&S.eLL)es+=' · L: U'+S.eLU+'–L'+S.eLL;if(S.eLF)es+=' '+S.eLF;e.push(es);}
+  if(e.length)parts.push('<span class="e">Elastics: '+e.join('')+'</span>');
+  let i=[];
+  if(S.instrFav){i.push(S.instrFav);}
+  else{if(S.instrItems.length)i.push(S.instrItems.join(' · '));if(S.recallWeeks)i.push('Recall '+S.recallWeeks);}
+  if(i.length)parts.push('<span class="i">Instr: '+i.join(' · ')+'</span>');
+  if(S.loggedAppl){let ap=S.loggedAppl;if(S.applAction)ap+=' — '+S.applAction;parts.push('<span class="ap">Appl: '+ap+'</span>');}
+  document.getElementById('sumText').innerHTML=parts.length?parts.join('<span class="sep">|</span>'):'— select a favourite or tap Custom to begin entry';
+  // Tab dots
+  const bracesSet=!!(S.wireFav||(S.wireSize&&S.wireMaterial)||S.auxFav||S.auxItems.length||S.elasticFav||(S.elasticClass&&S.elasticClass!=='None')||S.instrFav||S.instrItems.length);
+  const applSet=!!S.loggedAppl;
+  setDot('braces',bracesSet?'done':'');
+  setDot('appliance',applSet?'done':'');
+  // Quadrant statuses
+  setQS('wire',S.wireFav||(S.wireSize&&S.wireMaterial),S.wireFav?'★ fav':(S.wireSize&&S.wireMaterial?S.wireSize+' '+S.wireMaterial:'— not set'));
+  setQS('aux',S.auxFav||S.auxItems.length||S.goBetween||S.bondBand,S.auxFav?'★ fav':(S.auxItems.length?S.auxItems.length+' item(s)':S.goBetween||S.bondBand||'— not set'));
+  setQS('elastic',S.elasticFav||(S.elasticClass&&S.elasticClass!=='None'),S.elasticFav?'★ fav':(S.elasticClass&&S.elasticClass!=='None'?S.elasticClass:'— not set'));
+  setQS('instr',S.instrFav||S.instrItems.length,S.instrFav?'★ fav':(S.instrItems.length?S.instrItems.length+' instr':S.recallWeeks||'— not set'));
+  updateToothChart();
+}
+function setDot(tab,cls){const d=document.getElementById('dot-'+tab);d.className='tab-dot'+(cls?' '+cls:'');}
+function setQS(q,done,text){const el=document.getElementById(q+'-status');if(!el)return;el.textContent=text;el.className='q-status'+(done?' done':'');}
+
+function applyPreset(){
+  qtab('wire','custom',document.querySelectorAll('.wires .q-tab')[1]);
+  setTimeout(()=>{
+    const sel=(gid,val)=>{const b=[...document.querySelectorAll('#'+gid+' .opt')].find(b=>b.textContent.trim()===val);if(b){document.querySelectorAll('#'+gid+' .opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');S[gid]=val;}};
+    sel('wireStatus','New');sel('wireSize','19×25');sel('wireMaterial','SS');sel('wireArch','▲▼ Both');sel('wireWhere','6–6');sel('wireExt','Ext 7s');
+    S.elasticFav='Class II · R: U3–L7 Size 1 Heavy · L: U3–L6 Size 1 Medium';
+    document.querySelectorAll('.elastics .fav-item')[0].classList.add('selected');
+    S.instrFav='Oralizing + Tongue exercises + Recall 6 wks';
+    document.querySelectorAll('.instructions .fav-item')[0].classList.add('selected');
+    refresh();
+  },50);
+  document.getElementById('presetBanner').classList.add('hidden');
+}
+function clearAll(){
+  Object.keys(S).forEach(k=>{if(Array.isArray(S[k]))S[k]=[];else S[k]=null;});
+  document.querySelectorAll('.opt.sel').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.fav-item.selected').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.aux-item.sel').forEach(el=>{el.classList.remove('sel');el.querySelector('.aux-chk').style.cssText='';});
+  document.querySelectorAll('.instr-item.sel').forEach(el=>{el.classList.remove('sel');el.querySelector('.instr-chk').style.cssText='';});
+  ['cbRight','cbLeft'].forEach(id=>{document.getElementById(id).checked=false;});
+  document.getElementById('cbRightSub').classList.remove('on');
+  document.getElementById('cbLeftSub').classList.remove('on');
+  document.getElementById('applVisitLog').classList.remove('visible');
+  document.querySelectorAll('.active-appl-pill').forEach(p=>p.classList.remove('selected'));
+  document.getElementById('applDetailPanel').classList.remove('visible');
+  document.querySelectorAll('.appl-opt-card').forEach(c=>c.classList.remove('sel'));
+  refresh();
+}
+function saveVisit(){
+  const t=document.getElementById('sumText').textContent;
+  if(t.includes('select a favourite')){alert('Please enter at least one treatment detail before saving.');return;}
+  alert('✓ Visit saved — Priya Menon, Chair 4');
+}
+
+// ═══════════════════════════════════════════
+// VOICE FEATURE
+// ═══════════════════════════════════════════
+let recognition = null;
+let isListening = false;
+let parsedEntries = [];
+let finalTranscript = '';
+
+function toggleVoice() {
+  const panel = document.getElementById('voicePanel');
+  if (!panel.classList.contains('open')) {
+    panel.classList.add('open');
+    document.getElementById('voiceBtn').style.background = 'var(--primary-grad)';
+    document.getElementById('voiceBtn').style.color = 'white';
+    document.getElementById('voiceBtn').style.borderColor = 'transparent';
+  } else {
+    if (isListening) stopListening();
+    else startListening();
+  }
+}
+
+function closeVoice() {
+  if (isListening) stopListening();
+  document.getElementById('voicePanel').classList.remove('open');
+  document.getElementById('voiceBtn').style.cssText = '';
+}
+
+function startListening() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('Speech recognition is supported in Chrome and Edge. Please use one of these browsers for the voice feature.');
+    return;
+  }
+  recognition = new SpeechRecognition();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  finalTranscript = '';
+
+  recognition.onstart = () => {
+    isListening = true;
+    document.getElementById('voiceBtn').classList.add('listening');
+    document.getElementById('vpStatus').textContent = '● Listening...';
+    document.getElementById('vpStatus').className = 'vp-status listening';
+    document.getElementById('micWave').classList.add('active');
+  };
+
+  recognition.onresult = (event) => {
+    let interim = '';
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript + ' ';
+      } else {
+        interim += event.results[i][0].transcript;
+      }
+    }
+    const display = (finalTranscript ? '<span class="final">' + finalTranscript + '</span>' : '') +
+                    (interim ? '<span class="interim">' + interim + '...</span>' : '');
+    document.getElementById('vpTranscript').innerHTML = display || '<span class="interim">Listening...</span>';
+    if (finalTranscript.trim()) {
+      parseVoiceInput(finalTranscript);
+    }
+  };
+
+  recognition.onerror = (e) => {
+    console.log('Speech error:', e.error);
+    if (e.error === 'no-speech') return;
+    stopListening();
+  };
+
+  recognition.onend = () => {
+    if (isListening) recognition.start(); // keep going
+  };
+
+  recognition.start();
+}
+
+function stopListening() {
+  if (recognition) { recognition.stop(); recognition = null; }
+  isListening = false;
+  document.getElementById('voiceBtn').classList.remove('listening');
+  document.getElementById('vpStatus').textContent = finalTranscript.trim() ? 'Done — review entries' : 'Stopped';
+  document.getElementById('vpStatus').className = 'vp-status' + (finalTranscript.trim() ? ' done' : '');
+  document.getElementById('micWave').classList.remove('active');
+}
+
+// ── Clinical NLP Parser ─────────────────────────────
+function parseVoiceInput(text) {
+  const t = text.toLowerCase();
+  parsedEntries = [];
+
+  // Wire status
+  const status = t.includes('new wire') || t.includes('new ') ? 'New' :
+                 t.includes('continue') ? 'Continue' :
+                 t.includes('remove wire') ? 'Remove' :
+                 t.includes('replace') ? 'Replace' : null;
+
+  // Wire size
+  const sizeMap = {
+    'nineteen twenty-five':'19×25','nineteen by twenty-five':'19×25',
+    '19 25':'19×25','nineteen twenty five':'19×25',
+    'seventeen twenty-five':'17×25','17 25':'17×25','seventeen by twenty-five':'17×25',
+    'sixteen twenty-two':'16×22','16 22':'16×22',
+    'twenty-one twenty-five':'21×25',
+    'sixteen sixteen':'16×16','sixteen by sixteen':'16×16',
+    'sixteen':'16','eighteen':'18','fourteen':'14','twelve':'12','twenty':'20'
+  };
+  let wireSize = null;
+  for (const [spoken, val] of Object.entries(sizeMap)) {
+    if (t.includes(spoken)) { wireSize = val; break; }
+  }
+
+  // Material
+  const material = (t.includes('stainless steel') || t.includes(' ss ') || t.includes(' s s ')) ? 'SS' :
+                   t.includes('niti') || t.includes('nickel titanium') || t.includes('ni ti') ? 'NiTi' :
+                   t.includes('tma') || t.includes('titanium molybdenum') ? 'TMA' : null;
+
+  // Arch
+  const arch = (t.includes('upper and lower') || t.includes('both arches') || t.includes('upper lower') || t.includes('both')) ? '▲▼ Both' :
+               t.includes('upper') && !t.includes('lower') ? '▲ Upper' :
+               t.includes('lower') && !t.includes('upper') ? '▼ Lower' : null;
+
+  // Extension
+  const ext = t.includes('extend to eights') || t.includes('extended to eights') || t.includes('ext 8') ? 'Ext 8s' :
+              t.includes('extend to sevens') || t.includes('extended to sevens') || t.includes('ext 7') ? 'Ext 7s' :
+              t.includes('extend to sixes') || t.includes('extended to sixes') || t.includes('ext 6') ? 'Ext 6s' : null;
+
+  // Wire range
+  const wireWhere = t.includes('six to six') || t.includes('6 to 6') || t.includes('6-6') ? '6–6' :
+                   t.includes('seven to seven') || t.includes('7-7') ? '7–7' :
+                   t.includes('five to five') || t.includes('5-5') ? '5–5' :
+                   t.includes('two to two') || t.includes('2-2') ? '2–2' : null;
+
+  // Wire type
+  const wtype = t.includes('reverse curve') ? 'Reverse curve' :
+                t.includes('accentuated') ? 'Accentuated curve' :
+                t.includes('t-loop') || t.includes('t loop') ? 'T-loop' :
+                t.includes('expand') ? 'Expand' :
+                t.includes('retraction hooks') ? 'Retraction hooks' : null;
+
+  // Build wire entry
+  if (wireSize || material || status) {
+    const parts = [status||'New', wireSize||'', material||'', arch||'', wtype||'', wireWhere||'', ext||''].filter(Boolean);
+    parsedEntries.push({ cat:'wire', label: parts.join(' | '), data:{wireStatus:status,wireSize,wireMaterial:material,wireArch:arch,wireType:wtype,wireWhere:wireWhere||'6–6',wireExt:ext} });
+  }
+
+  // CB toggles
+  if (t.includes('active cb') || t.includes('active cinch back') || t.includes('cb active')) {
+    const cbParts = [];
+    if (t.includes('cb right') || t.includes('cb-right') || t.includes('right cb') || (!t.includes('left') && t.includes('active cb'))) cbParts.push('CB-Right Active');
+    if (t.includes('cb left') || t.includes('cb-left') || t.includes('left cb') || (!t.includes('right') && t.includes('active cb'))) cbParts.push('CB-Left Active');
+    if (cbParts.length) parsedEntries.push({ cat:'wire', label: cbParts.join(' · '), data:{cbRight:cbParts.includes('CB-Right Active'), cbLeft:cbParts.includes('CB-Left Active')} });
+  }
+
+  // Power chain
+  if (t.includes('power chain')) {
+    const pcArch = (t.includes('power chain upper') || (t.includes('power chain') && t.includes('upper'))) ? 'Upper' :
+                   (t.includes('power chain lower') || (t.includes('power chain') && t.includes('lower'))) ? 'Lower' : 'Upper';
+    parsedEntries.push({ cat:'aux', label:'Power Chain — ' + pcArch, data:{aux:'Power chain — '+pcArch} });
+  }
+
+  // Single tie
+  if (t.includes('single tie')) {
+    const stArch = t.includes('single tie upper') ? 'Upper' : t.includes('single tie lower') ? 'Lower' : 'Upper';
+    parsedEntries.push({ cat:'aux', label:'Single Tie — ' + stArch, data:{aux:'Single tie — '+stArch} });
+  }
+
+  // Other auxiliaries
+  const auxKeywords = [
+    {k:'wire tie', v:'Wire tie'},
+    {k:'k hook', v:'K hook'},
+    {k:'rotation wedge', v:'Rotation wedge'},
+    {k:' ocs ', v:'OCS'},
+    {k:' ccs ', v:'CCS'},
+    {k:'retraction spring', v:'Retraction spring'},
+    {k:'torquing spring', v:'Torquing spring'},
+    {k:' lel ', v:'LEL'},
+    {k:'lingual elastic', v:'LEL'},
+  ];
+  auxKeywords.forEach(({k,v}) => {
+    if (t.includes(k)) parsedEntries.push({ cat:'aux', label:v, data:{aux:v} });
+  });
+
+  // Bite guard
+  if (t.includes('bite pillow')) parsedEntries.push({ cat:'aux', label:'Bite Pillow', data:{biteGuard:'Bite Pillow'} });
+  if (t.includes('bite turbo')) parsedEntries.push({ cat:'aux', label:'Bite Turbo', data:{biteGuard:'Bite Turbo'} });
+  if (t.includes('bite ramp')) parsedEntries.push({ cat:'aux', label:'Bite Ramp', data:{biteGuard:'Bite Ramp'} });
+
+  // Elastics
+  const elasticClass = t.includes('class three') || t.includes('class 3') ? 'Class III' :
+                       t.includes('class two') || t.includes('class 2') || t.includes('class ii') ? 'Class II' :
+                       t.includes('class one') || t.includes('class 1') || t.includes('class i ') ? 'Class I' : null;
+  if (elasticClass) {
+    const force = t.includes('heavy') ? 'Heavy' : t.includes('medium') ? 'Medium' : t.includes('light') ? 'Light' : '';
+    const size = t.includes('size one') || t.includes('size 1') ? 'Size 1' : t.includes('size two') || t.includes('size 2') ? 'Size 2' : '';
+    parsedEntries.push({ cat:'elastic', label: elasticClass + (force ? ' · ' + force : '') + (size ? ' · ' + size : ''), data:{elasticClass, force, size} });
+  }
+
+  // Instructions
+  const instrKeywords = [
+    {k:'oralizing', v:'Oralizing Instructions'},
+    {k:'tongue exercise', v:'Tongue Exercises'},
+    {k:'fluoride', v:'Fluoride Application'},
+    {k:'hygiene', v:'Hygiene Reinforcement'},
+    {k:'pain medication', v:'Pain Medication Advised'},
+    {k:'breakage', v:'Breakage — Rebond'},
+  ];
+  instrKeywords.forEach(({k,v}) => {
+    if (t.includes(k)) parsedEntries.push({ cat:'instr', label:v, data:{instr:v} });
+  });
+
+  // Recall
+  const recallMatch = t.match(/recall (\w+) week/);
+  if (recallMatch) {
+    const numMap = {one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',eight:'8',ten:'10',twelve:'12'};
+    const num = numMap[recallMatch[1]] || recallMatch[1];
+    const weeks = ['4','6','8','10','12'].includes(num) ? num+' weeks' : null;
+    if (weeks) parsedEntries.push({ cat:'instr', label:'Recall ' + weeks, data:{recall:weeks} });
+  }
+
+  renderParsed();
+}
+
+function renderParsed() {
+  const container = document.getElementById('vpParsed');
+  if (!parsedEntries.length) return;
+
+  const catLabel = {wire:'Wire', aux:'Aux', elastic:'Elastic', instr:'Instr'};
+  const catClass = {wire:'cat-wire', aux:'cat-aux', elastic:'cat-elastic', instr:'cat-instr'};
+
+  container.innerHTML = parsedEntries.map((e,i) => `
+    <div class="vp-parsed-item new" id="vpe-${i}">
+      <span class="vp-parsed-cat ${catClass[e.cat]}">${catLabel[e.cat]}</span>
+      <span class="vp-parsed-text">${e.label}</span>
+      <button class="vp-parsed-apply" onclick="applyEntry(${i})">Apply</button>
+    </div>
+  `).join('');
+
+  document.getElementById('vpApplyAll').style.display = parsedEntries.length ? 'block' : 'none';
+  document.getElementById('vpStatus').textContent = parsedEntries.length + ' entries detected';
+  document.getElementById('vpStatus').className = 'vp-status processing';
+}
+
+function applyEntry(i) {
+  const e = parsedEntries[i];
+  applyData(e);
+  const el = document.getElementById('vpe-'+i);
+  if (el) { el.style.background='#e8f5e9'; el.style.borderColor='#4caf50'; el.querySelector('.vp-parsed-apply').textContent='✓ Applied'; el.querySelector('.vp-parsed-apply').style.cssText='font-size:10px;color:#2e7d32;background:#e8f5e9;border:1px solid #4caf50;border-radius:3px;padding:2px 7px;cursor:default;'; }
+  refresh();
+}
+
+function applyAllParsed() {
+  parsedEntries.forEach(e => applyData(e));
+  document.querySelectorAll('.vp-parsed-item').forEach(el => {
+    el.style.background='#e8f5e9'; el.style.borderColor='#4caf50';
+    const btn = el.querySelector('.vp-parsed-apply');
+    if (btn) { btn.textContent='✓'; btn.style.cssText='font-size:10px;color:#2e7d32;background:#e8f5e9;border:1px solid #4caf50;border-radius:3px;padding:2px 7px;cursor:default;'; }
+  });
+  document.getElementById('vpStatus').textContent = 'All applied ✓';
+  document.getElementById('vpStatus').className = 'vp-status done';
+  refresh();
+  // Auto-close after 1.5s
+  setTimeout(() => closeVoice(), 1500);
+}
+
+function applyData(e) {
+  const d = e.data;
+  // Ensure we're on braces tab
+  if (e.cat !== 'instr' || d.instr || d.recall) {
+    // Switch to custom mode for wire entries
+    if (e.cat === 'wire' && (d.wireSize || d.wireStatus || d.wireMaterial)) {
+      qtab('wire','custom', document.querySelectorAll('.wires .q-tab')[1]);
+    }
+  }
+
+  const setOpt = (groupId, val) => {
+    if (!val) return;
+    const btn = [...document.querySelectorAll('#'+groupId+' .opt')].find(b=>b.textContent.trim()===val);
+    if (btn) { document.querySelectorAll('#'+groupId+' .opt').forEach(x=>x.classList.remove('sel')); btn.classList.add('sel'); S[groupId]=val; }
+  };
+
+  if (d.wireStatus) setOpt('wireStatus', d.wireStatus);
+  if (d.wireSize) setOpt('wireSize', d.wireSize);
+  if (d.wireMaterial) setOpt('wireMaterial', d.wireMaterial);
+  if (d.wireArch) setOpt('wireArch', d.wireArch);
+  if (d.wireType) setOpt('wireType', d.wireType);
+  if (d.wireWhere) setOpt('wireWhere', d.wireWhere);
+  if (d.wireExt) setOpt('wireExt', d.wireExt);
+
+  if (d.cbRight !== undefined) {
+    const cb = document.getElementById('cbRight');
+    cb.checked = d.cbRight; cbToggle('Right', d.cbRight);
+    if (d.cbRight) { setTimeout(()=>{ const btn=[...document.querySelectorAll('#cbRightSub .opt')].find(b=>b.textContent==='Active'); if(btn){btn.classList.add('sel');S.cbRightMode='Active';} }, 50); }
+  }
+  if (d.cbLeft !== undefined) {
+    const cb = document.getElementById('cbLeft');
+    cb.checked = d.cbLeft; cbToggle('Left', d.cbLeft);
+    if (d.cbLeft) { setTimeout(()=>{ const btn=[...document.querySelectorAll('#cbLeftSub .opt')].find(b=>b.textContent==='Active'); if(btn){btn.classList.add('sel');S.cbLeftMode='Active';} }, 50); }
+  }
+
+  if (d.aux) {
+    qtab('aux','custom', document.querySelectorAll('.auxiliaries .q-tab')[1]);
+    const item = [...document.querySelectorAll('.aux-item')].find(el => el.querySelector('.aux-name')?.textContent.toLowerCase().includes(d.aux.split(' — ')[0].toLowerCase()));
+    if (item && !item.classList.contains('sel')) { auxToggle(item, d.aux); }
+    if (d.aux.startsWith('Power chain') || d.aux.startsWith('Single tie')) {
+      // handled above
+    }
+    if (d.biteGuard) setOpt('biteGuard', d.biteGuard);
+  }
+
+  if (d.elasticClass) {
+    qtab('elastic','custom', document.querySelectorAll('.elastics .q-tab')[1]);
+    setOpt('elasticClass', d.elasticClass);
+    if (d.force) { setOpt('eRF', d.force); setOpt('eLF', d.force); }
+    if (d.size) { setOpt('eRS', d.size); setOpt('eLS', d.size); }
+  }
+
+  if (d.instr) {
+    qtab('instr','custom', document.querySelectorAll('.instructions .q-tab')[1]);
+    const item = [...document.querySelectorAll('.instr-item')].find(el => el.querySelector('.instr-name')?.textContent === d.instr);
+    if (item && !item.classList.contains('sel')) { instrToggle(item); }
+  }
+  if (d.recall) {
+    qtab('instr','custom', document.querySelectorAll('.instructions .q-tab')[1]);
+    setOpt('recallWeeks', d.recall);
+  }
+}
+
+</script>
+</body>
+</html>
