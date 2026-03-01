@@ -303,7 +303,8 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-input-wrap{flex:1;position:relative;}
 .bb-input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--text);outline:none;transition:border-color .15s;}
 .bb-input:focus{border-color:var(--primary);}
-.bb-ghost{position:absolute;top:0;left:0;right:0;bottom:0;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;pointer-events:none;border-radius:7px;display:flex;align-items:center;overflow:hidden;white-space:nowrap;cursor:pointer;}
+.bb-ghost{position:absolute;top:0;left:0;right:0;bottom:0;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;pointer-events:none;border-radius:7px;display:flex;align-items:center;overflow:hidden;white-space:nowrap;}
+.bb-ghost.active{pointer-events:all;cursor:pointer;}
 .bb-ghost-typed{color:transparent;}
 .bb-ghost-suggest{color:#bbb;font-style:italic;}
 .bb-ghost-hint{position:absolute;right:10px;font-size:9px;color:#ccc;background:white;padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
@@ -1053,39 +1054,81 @@ function rmTag(q){
 }
 
 // ═══ AUTO SUGGEST ════════════════════════════════════
+// Each entry: trigger string (end of typed text) → suggestion to append
 const SUGGESTS=[
-  {t:'new ',s:'19×25 | SS | Both | 6–6 | Ext 7s'},{t:'new 19',s:'×25 | SS | Both | Ext 7s'},
-  {t:'new 19×25',s:' | SS | Both | 6–6 | Ext 7s'},{t:'new 19×25 ss',s:' | Both | 6–6 | Ext 7s'},
-  {t:'class ii',s:' · R: U3–L7 Heavy · L: U3–L6 Medium'},{t:'class 2',s:' · R: U3–L7 Heavy · L: U3–L6 Medium'},
-  {t:'pc lower',s:' 6–6'},{t:'power chain lower',s:' 6–6'},
-  {t:'oralizing',s:' + Tongue Exercises + Recall 6 wks'},
+  // Wire completions
+  {t:'new',        s:' 19×25 SS Both 6–6 Ext 7s'},
+  {t:'new 19',     s:'×25 SS Both Ext 7s'},
+  {t:'new 19×25',  s:' SS Both 6–6 Ext 7s'},
+  {t:'new 19×25 ss', s:' Both 6–6 Ext 7s'},
+  {t:'continue',   s:' 19×25 SS Both 6–6'},
+  {t:'new 17×25',  s:' TMA Both 5–5'},
+  {t:'new 16×22',  s:' NiTi Both 5–5'},
+  // Elastic completions
+  {t:'class ii',   s:' · R: U3–L7 Heavy · L: U3–L6 Medium'},
+  {t:'class 2',    s:' · R: U3–L7 Heavy · L: U3–L6 Medium'},
+  {t:'class iii',  s:' · R: U5–L3 Medium · L: U5–L3 Medium'},
+  {t:'class i',    s:' · Both U3–L3 Light'},
+  // Aux completions
+  {t:'pc lower',   s:' 6–6'},
+  {t:'pc upper',   s:' 6–6'},
+  {t:'power chain lower', s:' 6–6'},
+  {t:'power chain upper', s:' L2–R7'},
+  // Instruction completions
+  {t:'oralizing',  s:' + Tongue Exercises + Recall 6 wks'},
+  {t:'hygiene',    s:' reinforcement + Fluoride + Recall 4 wks'},
+  {t:'recall 4',   s:' weeks'},
+  {t:'recall 6',   s:' weeks'},
+  {t:'recall 8',   s:' weeks'},
 ];
 let bbSuggest=null;
 
 function handleBBInput(inp){
-  if(!autoSuggestOn){document.getElementById('bbGhost').style.display='none';return;}
-  const v=inp.value.toLowerCase();
-  if(!v){document.getElementById('bbGhost').style.display='none';bbSuggest=null;return;}
+  const ghost=document.getElementById('bbGhost');
+  if(!autoSuggestOn){ghost.style.display='none';ghost.classList.remove('active');bbSuggest=null;return;}
+  const v=inp.value.toLowerCase().trimEnd();
+  if(!v){ghost.style.display='none';ghost.classList.remove('active');bbSuggest=null;return;}
   let match=null;
-  for(const s of SUGGESTS){if(v===s.t.trimEnd()||v.endsWith(s.t.trimEnd())){match=s.s;break;}}
-  if(match){
+  // Find longest matching trigger that the typed text ends with
+  let best=null;
+  for(const s of SUGGESTS){
+    const trigger=s.t.toLowerCase();
+    if(v===trigger||v.endsWith(' '+trigger)||v.endsWith('\n'+trigger)){
+      if(!best||s.t.length>best.t.length) best=s;
+    }
+  }
+  if(best){
+    match=best.s;
     bbSuggest=inp.value+match;
-    document.getElementById('bbGhost').style.display='flex';
+    ghost.style.display='flex';
+    ghost.classList.add('active');
     document.getElementById('bbGhostTyped').textContent=inp.value;
     document.getElementById('bbGhostSuggest').textContent=match;
-  } else {document.getElementById('bbGhost').style.display='none';bbSuggest=null;}
+  } else {
+    ghost.style.display='none';
+    ghost.classList.remove('active');
+    bbSuggest=null;
+  }
 }
 
 function handleBBKey(e){
   if(e.key==='Tab'&&bbSuggest){e.preventDefault();acceptSuggest();}
+  // Also accept on ArrowRight if cursor is at end
+  if(e.key==='ArrowRight'&&bbSuggest){
+    const inp=e.target;
+    if(inp.selectionStart===inp.value.length){e.preventDefault();acceptSuggest();}
+  }
 }
 
 function acceptSuggest(){
   if(!bbSuggest)return;
   const inp=document.getElementById('bbInput');
+  const ghost=document.getElementById('bbGhost');
   inp.value=bbSuggest; bbSuggest=null;
-  document.getElementById('bbGhost').style.display='none';
+  ghost.style.display='none'; ghost.classList.remove('active');
   inp.focus();
+  // re-check for chained suggestions
+  handleBBInput(inp);
 }
 
 // ═══ TOOTH CHART UPDATE ══════════════════════════════
@@ -1299,29 +1342,100 @@ function stopListening(){
 }
 
 function parseVoice(text){
-  const t=text.toLowerCase();parsedEntries=[];
-  const sizeMap={'nineteen twenty-five':'19×25','nineteen by twenty-five':'19×25','19 25':'19×25','nineteen twenty five':'19×25','seventeen twenty-five':'17×25','17 25':'17×25','sixteen twenty-two':'16×22','16 22':'16×22','twenty-one twenty-five':'21×25'};
+  const t=text.toLowerCase().replace(/[,\.]/g,' ');
+  parsedEntries=[];
+
+  // ── Wire detection ────────────────────────────────
+  // Size: handle spoken variants like "nineteen twenty two", "19/22", "16 by 22" etc
+  const sizeMap={
+    'nineteen twenty.five':'19×25','nineteen by twenty.five':'19×25','nineteen twenty five':'19×25','19.25':'19×25','19 25':'19×25',
+    'seventeen twenty.five':'17×25','seventeen by twenty.five':'17×25','17 25':'17×25',
+    'sixteen twenty.two':'16×22','sixteen by twenty.two':'16×22','sixteen twenty two':'16×22','16.22':'16×22','16 22':'16×22','19.22':'19×22',
+    'twenty.one twenty.five':'21×25','21 25':'21×25',
+    'sixteen sixteen':'16×16','16.16':'16×16',
+    'sixteen eighteen':'16×18','16.18':'16×18',
+    'twelve':'12','fourteen':'14','sixteen':'16','eighteen':'18',
+  };
+  // Also handle slash/dot as separator: "19/22" → try both
+  const normalised=t.replace(/(\d+)[\/\.](\d+)/g,'$1 $2');
+
   let wireSize=null;
-  for(const[k,v]of Object.entries(sizeMap)){if(t.includes(k)){wireSize=v;break;}}
-  const status=t.includes('new')?'New':t.includes('continue')?'Continue':t.includes('remove wire')?'Remove':null;
-  const material=t.includes('stainless steel')||t.includes(' ss ')?'SS':t.includes('niti')||t.includes('nickel')?'NiTi':t.includes('tma')?'TMA':null;
-  const arch=t.includes('upper and lower')||t.includes('both')?'Both':t.includes('upper')&&!t.includes('lower')?'Upper':t.includes('lower')&&!t.includes('upper')?'Lower':null;
-  const ext=t.includes('extended to sevens')||t.includes('ext 7')?'Ext 7s':t.includes('extended to eights')||t.includes('ext 8')?'Ext 8s':null;
-  if(wireSize||material||status){
-    const parts=[status||'New',wireSize||'',material||'',arch||'',ext||''].filter(Boolean);
-    parsedEntries.push({cat:'wire',lbl:parts.join(' | '),quad:'wires',val:parts.join(' | ')});
+  for(const[k,v]of Object.entries(sizeMap)){
+    if(normalised.includes(k.replace(/\./g,' '))||t.includes(k.replace(/\./g,'/'))){wireSize=v;break;}
   }
-  if(t.includes('power chain upper'))parsedEntries.push({cat:'aux',lbl:'Power Chain Upper',quad:'aux',val:'Power Chain Upper'});
-  if(t.includes('power chain lower')||t.includes('pc lower'))parsedEntries.push({cat:'aux',lbl:'Power Chain Lower',quad:'aux',val:'Power Chain Lower'});
-  const ec=t.includes('class three')||t.includes('class 3')?'Class III':t.includes('class two')||t.includes('class 2')?'Class II':t.includes('class one')||t.includes('class 1')?'Class I':null;
+
+  const hasWireWord=t.includes('wire')||t.includes('new wire')||t.includes('continue wire')||wireSize!==null;
+  const status=t.includes('new ')||t.includes('place')?'New':t.includes('continue')?'Continue':t.includes('remove wire')||t.includes('take off wire')?'Remove':null;
+  const material=
+    t.includes('stainless steel')||/ ss /.test(' '+t+' ')||t.includes(' ss,')? 'SS':
+    t.includes('niti')||t.includes('nickel titanium')||t.includes('nit ')? 'NiTi':
+    t.includes('tma')||t.includes('titanium molybdenum')? 'TMA':null;
+  const arch=
+    (t.includes('upper and lower')||t.includes('both arches')||t.includes('upper lower'))? 'Both':
+    t.includes('upper')&&t.includes('lower')? 'Both':
+    t.includes('upper')&&!t.includes('lower')? 'Upper':
+    t.includes('lower')&&!t.includes('upper')? 'Lower':null;
+  const ext=
+    t.includes('ext 7')||t.includes('extended to seven')||t.includes('extend to seven')? 'Ext 7s':
+    t.includes('ext 8')||t.includes('extended to eight')? 'Ext 8s':
+    t.includes('ext 6')||t.includes('extended to six')? 'Ext 6s':null;
+  const range=
+    t.includes('seven to seven')||t.includes('7 to 7')||t.includes('7-7')? '7–7':
+    t.includes('six to six')||t.includes('6 to 6')||t.includes('6-6')? '6–6':
+    t.includes('five to five')||t.includes('5 to 5')||t.includes('5-5')? '5–5':null;
+  const wtype=
+    t.includes('reverse curve')? 'Reverse curve':
+    t.includes('accentuated')? 'Accentuated curve':
+    t.includes('t loop')||t.includes('t-loop')? 'T-loop':
+    t.includes('heat treated')? 'Heat treated':
+    t.includes('plain')? 'Plain':null;
+
+  if(wireSize||status||material){
+    const parts=[status||'New', wireSize||'', material||'', arch||'', range||'', ext||'', wtype||''].filter(Boolean);
+    const val=parts.join(' | ');
+    parsedEntries.push({cat:'wire',lbl:val,quad:'wires',val});
+  }
+
+  // ── Aux detection ─────────────────────────────────
+  if(t.includes('power chain upper')||t.includes('pc upper')) parsedEntries.push({cat:'aux',lbl:'Power Chain Upper',quad:'aux',val:'Power Chain Upper'});
+  if(t.includes('power chain lower')||t.includes('pc lower')) parsedEntries.push({cat:'aux',lbl:'Power Chain Lower',quad:'aux',val:'Power Chain Lower'});
+  if(t.includes('wire tie')) parsedEntries.push({cat:'aux',lbl:'Wire Tie',quad:'aux',val:'Wire Tie'});
+  if(t.includes('k hook')) parsedEntries.push({cat:'aux',lbl:'K Hook',quad:'aux',val:'K Hook'});
+  if(/ lel\b/.test(' '+t)||t.includes('lingual elastic')) parsedEntries.push({cat:'aux',lbl:'LEL',quad:'aux',val:'LEL'});
+  if(/\bocs\b/.test(t)) parsedEntries.push({cat:'aux',lbl:'OCS',quad:'aux',val:'OCS'});
+  if(/\bccs\b/.test(t)) parsedEntries.push({cat:'aux',lbl:'CCS',quad:'aux',val:'CCS'});
+  if(t.includes('bite pillow')) parsedEntries.push({cat:'aux',lbl:'Bite Pillow',quad:'aux',val:'Bite Pillow'});
+  if(t.includes('bite turbo')) parsedEntries.push({cat:'aux',lbl:'Bite Turbo',quad:'aux',val:'Bite Turbo'});
+  if(t.includes('bond')&&!t.includes('rebond')) parsedEntries.push({cat:'aux',lbl:'Bond',quad:'aux',val:'Bond'});
+  if(t.includes('rebond')) parsedEntries.push({cat:'aux',lbl:'Rebond',quad:'aux',val:'Rebond'});
+
+  // ── Elastic detection ──────────────────────────────
+  const ec=
+    t.includes('class three')||t.includes('class 3')||t.includes('class iii')? 'Class III':
+    t.includes('class two')||t.includes('class 2')||t.includes('class ii')? 'Class II':
+    t.includes('class one')||t.includes('class 1')||/ class i\b/.test(t)? 'Class I':null;
   if(ec){
     const f=t.includes('heavy')?'Heavy':t.includes('medium')?'Medium':t.includes('light')?'Light':'';
-    parsedEntries.push({cat:'elastic',lbl:ec+(f?' · '+f:''),quad:'elastic',val:ec+(f?' · '+f:'')});
+    const sides=t.includes('both side')||(!t.includes('right')&&!t.includes('left'))?' · Both sides':'';
+    parsedEntries.push({cat:'elastic',lbl:ec+(f?' · '+f:'')+sides,quad:'elastic',val:ec+(f?' · '+f:'')+sides});
   }
-  if(t.includes('oralizing'))parsedEntries.push({cat:'instr',lbl:'Oralizing Instructions',quad:'instr',val:'Oralizing Instructions'});
-  if(t.includes('tongue'))parsedEntries.push({cat:'instr',lbl:'Tongue Exercises',quad:'instr',val:'Tongue Exercises'});
-  const rm=t.match(/recall (\w+) week/);
-  if(rm){const nm={'four':'4 weeks','six':'6 weeks','eight':'8 weeks','six':'6 weeks'};const rw=nm[rm[1]]||rm[1]+' weeks';parsedEntries.push({cat:'instr',lbl:'Recall '+rw,quad:'instr',val:'Recall '+rw});}
+
+  // ── Instruction detection ─────────────────────────
+  if(t.includes('oraliz')) parsedEntries.push({cat:'instr',lbl:'Oralizing Instructions',quad:'instr',val:'Oralizing Instructions'});
+  if(t.includes('tongue exercise')) parsedEntries.push({cat:'instr',lbl:'Tongue Exercises',quad:'instr',val:'Tongue Exercises'});
+  if(t.includes('fluoride')) parsedEntries.push({cat:'instr',lbl:'Fluoride Application',quad:'instr',val:'Fluoride Application'});
+  if(t.includes('hygiene')) parsedEntries.push({cat:'instr',lbl:'Hygiene Reinforcement',quad:'instr',val:'Hygiene Reinforcement'});
+  if(t.includes('pain medication')||t.includes('pain med')) parsedEntries.push({cat:'instr',lbl:'Pain Medication Advised',quad:'instr',val:'Pain Medication Advised'});
+  if(t.includes('breakage')||t.includes('rebond bracket')) parsedEntries.push({cat:'instr',lbl:'Breakage — Rebond',quad:'instr',val:'Breakage — Rebond'});
+
+  // Recall — match "recall X weeks/week"
+  const recallMatch=t.match(/recall\s+(\w+)\s*weeks?/);
+  if(recallMatch){
+    const numMap={four:'4',six:'6',eight:'8',ten:'10',twelve:'12',two:'2',3:'3',4:'4',6:'6',8:'8',10:'10',12:'12'};
+    const rn=numMap[recallMatch[1]]||recallMatch[1];
+    parsedEntries.push({cat:'instr',lbl:'Recall '+rn+' wks',quad:'instr',val:'Recall '+rn+' wks'});
+  }
+
   renderParsed();
 }
 
@@ -1330,33 +1444,49 @@ const CATLBL={wire:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr'};
 
 function renderParsed(){
   const c=document.getElementById('vpParsed');
-  if(!parsedEntries.length)return;
-  c.innerHTML=parsedEntries.map((e,i)=>`<div class="vp-parsed-item new" id="vpe${i}"><span class="vp-cat ${CATCLS[e.cat]}">${CATLBL[e.cat]}</span><span class="vp-parsed-text">${e.lbl}</span><button class="vp-apply-btn" onclick="applyEntry(${i})">Apply</button></div>`).join('');
+  if(!parsedEntries.length){
+    c.innerHTML='<div style="font-size:11px;color:var(--text-muted);font-style:italic;">Speak clearly — detecting wire, elastics, auxiliaries, instructions...</div>';
+    document.getElementById('vpApplyAll').style.display='none';
+    return;
+  }
+  c.innerHTML=parsedEntries.map((e,i)=>
+    `<div class="vp-parsed-item new" id="vpe${i}">
+      <span class="vp-cat ${CATCLS[e.cat]}">${CATLBL[e.cat]}</span>
+      <span class="vp-parsed-text">${e.lbl}</span>
+      <button class="vp-apply-btn" onclick="applyEntry(${i})">Add to entry</button>
+    </div>`
+  ).join('');
   document.getElementById('vpApplyAll').style.display='block';
   document.getElementById('vpStatus').textContent=parsedEntries.length+' detected';
 }
 
 function applyEntry(i){
   const e=parsedEntries[i];
-  const inp=document.getElementById(e.quad+'-input');
-  if(inp){
-    inp.value=inp.value?inp.value+' · '+e.val:e.val;
-    QV[e.quad]=inp.value;
+  // Push into bottom input bar text
+  const bbInp=document.getElementById('bbInput');
+  bbInp.value=(bbInp.value.trim()?bbInp.value.trim()+' · ':'')+e.val;
+  handleBBInput(bbInp);
+  // Also update quadrant input
+  const qInp=document.getElementById(e.quad+'-input');
+  if(qInp){
+    qInp.value=(qInp.value.trim()?qInp.value.trim()+' · ':'')+e.val;
+    QV[e.quad]=qInp.value;
     document.getElementById(e.quad+'-send').classList.add('show');
   }
-  // Also push directly to bottom bar tags
-  barTags[e.quad]=(barTags[e.quad]?barTags[e.quad]+' · ':'')+e.val;
-  renderBarTags();
+  // Mark as applied
   const el=document.getElementById('vpe'+i);
-  if(el){el.style.background='#e8f5e9';el.style.borderColor='#4caf50';const b=el.querySelector('.vp-apply-btn');if(b)b.textContent='✓';}
+  if(el){
+    el.style.background='#e8f5e9';el.style.borderColor='#4caf50';
+    const b=el.querySelector('.vp-apply-btn');if(b){b.textContent='✓ Added';b.style.color='#2e7d32';}
+  }
   updateCharts();
 }
 
 function applyAllParsed(){
-  parsedEntries.forEach((e,i)=>applyEntry(i));
-  document.getElementById('vpStatus').textContent='All applied ✓';
+  parsedEntries.forEach((_,i)=>applyEntry(i));
+  document.getElementById('vpStatus').textContent='All added ✓';
   document.getElementById('vpStatus').className='vp-status done';
-  setTimeout(()=>closeVoice(),1500);
+  setTimeout(()=>closeVoice(),1200);
 }
 
 function saveVisit(){
