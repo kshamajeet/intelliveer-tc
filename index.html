@@ -308,13 +308,7 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-ghost-typed{color:transparent;}
 .bb-ghost-suggest{color:#bbb;font-style:italic;}
 .bb-ghost-hint{position:absolute;right:10px;font-size:9px;color:#ccc;background:white;padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
-/* Voice area inline */
-.bb-voice-area{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);max-height:180px;}
-.bb-voice-left{padding:10px 16px;border-right:1px solid var(--border);overflow-y:auto;}
-.bb-voice-right{padding:10px 16px;overflow-y:auto;}
-.bb-voice-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.bb-voice-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
-.vp-transcript{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-mid);line-height:1.6;min-height:56px;outline:none;transition:border-color .15s;} .vp-transcript:focus{border-color:var(--primary);}
+/* vp-status retained for compatibility */
 .vp-status{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--bg);color:var(--text-muted);}
 .vp-status.listening{background:#ffeee9;color:var(--primary);}
 .vp-status.done{background:#e8f5e9;color:#2e7d32;}
@@ -843,6 +837,18 @@ textarea.notes:focus{border-color:var(--primary);}
   </div><!-- /content-row -->
 </div><!-- /app-body -->
 
+<!-- VOICE PARSED POPOVER — appears above bottom bar when voice detects entries -->
+<div id="voiceParsedPopover" style="display:none;position:fixed;bottom:0;left:var(--nav-w);right:0;z-index:399;background:white;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 16px;box-shadow:0 -4px 16px rgba(0,0,0,.08);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);">✨ Detected from voice</div>
+    <div style="display:flex;gap:6px;">
+      <button class="btn-apply" id="vpApplyAll" onclick="applyAllParsed()" style="display:none;font-size:10px;padding:4px 12px;">Add All →</button>
+      <button onclick="document.getElementById('voiceParsedPopover').style.display='none'" style="background:transparent;border:1px solid var(--border);color:var(--text-muted);font-size:10px;padding:3px 8px;border-radius:4px;cursor:pointer;font-family:Montserrat,sans-serif;">✕</button>
+    </div>
+  </div>
+  <div class="vp-parsed" id="vpParsed" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+</div>
+
 <!-- UNIFIED INTELLIGENT BOTTOM BAR -->
 <div class="bottom-bar" id="bottomBar">
 
@@ -879,40 +885,13 @@ textarea.notes:focus{border-color:var(--primary);}
     </div>
 
     <!-- Voice button — opens inline voice area -->
-    <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceArea()" title="Voice input">🎙️</button>
+    <div class="mic-wave" id="micWave" style="flex-shrink:0;"><span></span><span></span><span></span><span></span><span></span></div>
+    <button class="voice-btn" id="voiceBtn" onclick="toggleListening()" title="Tap to speak">🎙️</button>
     <button class="clr-btn" onclick="clearAll()">Clear</button>
     <button class="save-btn" onclick="saveVisit()">Save Visit ✓</button>
   </div>
 
-  <!-- Row 3: Voice area (hidden by default, expands inline) -->
-  <div class="bb-voice-area" id="bbVoiceArea" style="display:none;">
-    <div class="bb-voice-left">
-      <div class="bb-voice-header">
-        <div class="bb-voice-title">
-          🎙️ Voice Entry
-          <div class="mic-wave" id="micWave"><span></span><span></span><span></span><span></span><span></span></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="vp-status" id="vpStatus">Ready — tap mic to begin</div>
-          <button class="voice-btn" id="voiceMicBtn" onclick="toggleListening()" style="width:32px;height:32px;font-size:14px;">🎙️</button>
-        </div>
-      </div>
-      <textarea class="vp-transcript" id="vpTranscript"
-        placeholder='Tap mic and speak — or type / edit directly here&#10;e.g. "new 19x25 SS both ext 7s, class two heavy, oralizing recall 6 weeks"'
-        oninput="parseVoice(this.value)"
-        style="resize:none;width:100%;cursor:text;font-style:normal;font-family:Montserrat,sans-serif;min-height:56px;"></textarea>
-      <button onclick="sendTranscriptToInstructions()" style="margin-top:5px;width:100%;background:var(--grad);color:white;border:none;font-family:Montserrat,sans-serif;font-weight:700;font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;box-shadow:0 2px 6px rgba(236,110,77,.25);">→ Send to Instructions bar</button>
-    </div>
-    <div class="bb-voice-right">
-      <div class="bb-voice-header">
-        <div class="bb-voice-title">✨ Detected entries</div>
-        <button class="btn-apply" id="vpApplyAll" onclick="applyAllParsed()" style="display:none;font-size:10px;padding:4px 10px;">Apply All ✓</button>
-      </div>
-      <div class="vp-parsed" id="vpParsed">
-        <div style="font-size:11px;color:var(--text-muted);font-style:italic;">Detected entries appear here as you speak...</div>
-      </div>
-    </div>
-  </div>
+
 
 </div>
 
@@ -926,9 +905,9 @@ let isListening = false;
 let recognition = null;
 let finalTranscript = '';
 
-const QMAP = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr'};
-const QLBL = {wires:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr'};
-const QCOL = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr'};
+const QMAP = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr',voice:'voice'};
+const QLBL = {wires:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr',voice:'Voice'};
+const QCOL = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr',voice:'instr'};
 
 // ═══ TAB SWITCHING ════════════════════════════════════
 function switchTab(name,el){
@@ -1289,26 +1268,12 @@ function setTabDot(tab,cls){
 }
 
 // ═══ VOICE ════════════════════════════════════════════
-function toggleVoiceArea(){
-  const area=document.getElementById('bbVoiceArea');
-  const btn=document.getElementById('voiceBtn');
-  const isOpen=area.style.display!=='none';
-  if(isOpen){
-    area.style.display='none';
-    btn.classList.remove('voice-open');
-    if(isListening)stopListening();
-  } else {
-    area.style.display='grid';
-    btn.classList.add('voice-open');
-  }
-}
-function closeVoice(){
-  document.getElementById('bbVoiceArea').style.display='none';
-  document.getElementById('voiceBtn').classList.remove('voice-open');
-  if(isListening)stopListening();
-}
 function toggleListening(){
   if(isListening)stopListening();else startListening();
+}
+function closeVoice(){
+  if(isListening)stopListening();
+  document.getElementById('voiceParsedPopover').style.display='none';
 }
 function startListening(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1316,9 +1281,12 @@ function startListening(){
   recognition=new SR();recognition.continuous=true;recognition.interimResults=true;recognition.lang='en-US';
   finalTranscript='';
   recognition.onstart=()=>{
-    isListening=true;document.getElementById('voiceBtn').classList.add('listening');
-    document.getElementById('vpStatus').textContent='● Listening...';document.getElementById('vpStatus').className='vp-status listening';
+    isListening=true;
+    document.getElementById('voiceBtn').classList.add('listening');
     document.getElementById('micWave').classList.add('active');
+    const bbInp=document.getElementById('bbInput');
+    bbInp.placeholder='Listening...';
+    bbInp.style.borderColor='var(--primary)';
   };
   recognition.onresult=(e)=>{
     let interim='';
@@ -1326,9 +1294,14 @@ function startListening(){
       if(e.results[i].isFinal)finalTranscript+=e.results[i][0].transcript+' ';
       else interim+=e.results[i][0].transcript;
     }
-    const ta=document.getElementById('vpTranscript');
-    ta.value=(finalTranscript+(interim?'('+interim+'...)':'')).trim();
+    // Transcript flows directly into the main input bar
+    const bbInp=document.getElementById('bbInput');
+    const display=(finalTranscript+(interim?' ('+interim.trim()+'...)':'')).trim();
+    bbInp.value=display;
+    bbInp.style.fontStyle=interim?'italic':'normal';
     if(finalTranscript.trim())parseVoice(finalTranscript);
+    // Also trigger autosuggest
+    handleBBInput(bbInp);
   };
   recognition.onerror=(e)=>{if(e.error!=='no-speech')stopListening();};
   recognition.onend=()=>{if(isListening)recognition.start();};
@@ -1338,9 +1311,11 @@ function stopListening(){
   if(recognition){recognition.stop();recognition=null;}
   isListening=false;
   document.getElementById('voiceBtn').classList.remove('listening');
-  document.getElementById('vpStatus').textContent=finalTranscript.trim()?'Done ✓':'Stopped';
-  document.getElementById('vpStatus').className='vp-status'+(finalTranscript.trim()?' done':'');
   document.getElementById('micWave').classList.remove('active');
+  const bbInp=document.getElementById('bbInput');
+  bbInp.placeholder='Type here · or tap → Send from any quadrant above · or use 🎙️ voice...';
+  bbInp.style.borderColor='';
+  bbInp.style.fontStyle='normal';
 }
 
 function parseVoice(text){
@@ -1446,20 +1421,23 @@ const CATLBL={wire:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr'};
 
 function renderParsed(){
   const c=document.getElementById('vpParsed');
+  const popover=document.getElementById('voiceParsedPopover');
   if(!parsedEntries.length){
-    c.innerHTML='<div style="font-size:11px;color:var(--text-muted);font-style:italic;">Speak clearly — detecting wire, elastics, auxiliaries, instructions...</div>';
+    c.innerHTML='';
+    if(popover)popover.style.display='none';
     document.getElementById('vpApplyAll').style.display='none';
     return;
   }
+  // Show as compact inline chips with Add button
   c.innerHTML=parsedEntries.map((e,i)=>
-    `<div class="vp-parsed-item new" id="vpe${i}">
+    `<div class="vp-parsed-item new" id="vpe${i}" style="display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--bg);flex-shrink:0;">
       <span class="vp-cat ${CATCLS[e.cat]}">${CATLBL[e.cat]}</span>
-      <span class="vp-parsed-text">${e.lbl}</span>
-      <button class="vp-apply-btn" onclick="applyEntry(${i})">Add to entry</button>
+      <span style="font-size:11px;color:var(--text-mid);">${e.lbl}</span>
+      <button class="vp-apply-btn" onclick="applyEntry(${i})" style="font-size:10px;padding:2px 8px;">Add →</button>
     </div>`
   ).join('');
   document.getElementById('vpApplyAll').style.display='block';
-  document.getElementById('vpStatus').textContent=parsedEntries.length+' detected';
+  if(popover)popover.style.display='block';
 }
 
 function applyEntry(i){
@@ -1486,23 +1464,10 @@ function applyEntry(i){
 
 function applyAllParsed(){
   parsedEntries.forEach((_,i)=>applyEntry(i));
-  document.getElementById('vpStatus').textContent='All added ✓';
-  document.getElementById('vpStatus').className='vp-status done';
-  setTimeout(()=>closeVoice(),1200);
-}
-
-function sendTranscriptToInstructions(){
-  const ta=document.getElementById('vpTranscript');
-  const text=ta.value.trim();
-  if(!text)return;
-  // Push raw transcript text into bottom instructions bar
-  const bbInp=document.getElementById('bbInput');
-  bbInp.value=(bbInp.value.trim()?bbInp.value.trim()+' · ':'')+text;
-  handleBBInput(bbInp);
-  // Visual feedback
-  const btn=event.target;
-  btn.textContent='✓ Added to Instructions';btn.style.background='#4caf50';
-  setTimeout(()=>{btn.textContent='→ Send to Instructions bar';btn.style.background='';},1800);
+  setTimeout(()=>{
+    document.getElementById('voiceParsedPopover').style.display='none';
+    stopListening();
+  },1000);
 }
 
 function saveVisit(){
