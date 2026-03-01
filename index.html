@@ -888,7 +888,7 @@ textarea.notes:focus{border-color:var(--primary);}
     <div class="mic-wave" id="micWave" style="flex-shrink:0;"><span></span><span></span><span></span><span></span><span></span></div>
     <button class="voice-btn" id="voiceBtn" onclick="toggleListening()" title="Tap to speak">🎙️</button>
     <button class="clr-btn" onclick="clearAll()">Clear</button>
-    <button class="save-btn" onclick="saveVisit()">Save Visit ✓</button>
+    <button class="save-btn" id="bbSendBtn" onclick="sendInputToInstructions()">Send →</button>
   </div>
 
 
@@ -906,8 +906,8 @@ let recognition = null;
 let finalTranscript = '';
 
 const QMAP = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr',voice:'voice'};
-const QLBL = {wires:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr',voice:'Voice'};
-const QCOL = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr',voice:'instr'};
+const QLBL = {wires:'Wire',aux:'Aux',elastic:'Elastic',instr:'Instr',voice:'Voice',input:'Entry'};
+const QCOL = {wires:'wire',aux:'aux',elastic:'elastic',instr:'instr',voice:'instr',input:'wire'};
 
 // ═══ TAB SWITCHING ════════════════════════════════════
 function switchTab(name,el){
@@ -1470,11 +1470,21 @@ function applyAllParsed(){
   },1000);
 }
 
-function saveVisit(){
-  const hasTags=Object.keys(barTags).length>0;
-  const hasBBInput=document.getElementById('bbInput').value.trim().length>0;
-  if(!hasTags&&!hasBBInput){alert('Please add at least one treatment entry before saving.');return;}
-  alert('✓ Visit saved — Priya Menon, 06/14/2026');
+function sendInputToInstructions(){
+  const inp=document.getElementById('bbInput');
+  const text=inp.value.trim();
+  if(!text)return;
+  // Add as tag in Instructions row
+  barTags['input']=(barTags['input']?barTags['input']+' · ':'')+text;
+  renderBarTags();
+  // Clear the input
+  inp.value='';
+  document.getElementById('bbGhost').style.display='none';
+  bbSuggest=null;
+  // Button feedback
+  const btn=document.getElementById('bbSendBtn');
+  btn.textContent='✓ Sent'; btn.style.background='#4caf50';
+  setTimeout(()=>{btn.textContent='Send →';btn.style.background='';},1500);
 }
 </script>
 </body>
