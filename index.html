@@ -314,7 +314,7 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-voice-right{padding:10px 16px;overflow-y:auto;}
 .bb-voice-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
 .bb-voice-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
-.vp-transcript{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-mid);line-height:1.6;font-style:italic;min-height:48px;}
+.vp-transcript{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-mid);line-height:1.6;min-height:56px;outline:none;transition:border-color .15s;} .vp-transcript:focus{border-color:var(--primary);}
 .vp-status{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--bg);color:var(--text-muted);}
 .vp-status.listening{background:#ffeee9;color:var(--primary);}
 .vp-status.done{background:#e8f5e9;color:#2e7d32;}
@@ -848,7 +848,7 @@ textarea.notes:focus{border-color:var(--primary);}
 
   <!-- Row 1: Quadrant tags -->
   <div class="bb-tags-row" id="bbTagsRow">
-    <div class="bb-tags-lbl">Sent</div>
+    <div class="bb-tags-lbl">Instructions</div>
     <div id="bb-tags" style="display:flex;gap:6px;flex-wrap:wrap;flex:1;align-items:center;">
       <span class="bb-empty" id="bbEmpty">— tap → Send from any quadrant</span>
     </div>
@@ -897,9 +897,11 @@ textarea.notes:focus{border-color:var(--primary);}
           <button class="voice-btn" id="voiceMicBtn" onclick="toggleListening()" style="width:32px;height:32px;font-size:14px;">🎙️</button>
         </div>
       </div>
-      <div class="vp-transcript" id="vpTranscript">
-        <span style="color:var(--text-muted);font-style:italic;">Tap mic and speak — e.g. "new nineteen twenty-five stainless both extended to sevens, class two heavy, oralizing recall six weeks"</span>
-      </div>
+      <textarea class="vp-transcript" id="vpTranscript"
+        placeholder='Tap mic and speak — or type / edit directly here&#10;e.g. "new 19x25 SS both ext 7s, class two heavy, oralizing recall 6 weeks"'
+        oninput="parseVoice(this.value)"
+        style="resize:none;width:100%;cursor:text;font-style:normal;font-family:Montserrat,sans-serif;min-height:56px;"></textarea>
+      <button onclick="sendTranscriptToInstructions()" style="margin-top:5px;width:100%;background:var(--grad);color:white;border:none;font-family:Montserrat,sans-serif;font-weight:700;font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;box-shadow:0 2px 6px rgba(236,110,77,.25);">→ Send to Instructions bar</button>
     </div>
     <div class="bb-voice-right">
       <div class="bb-voice-header">
@@ -1324,8 +1326,8 @@ function startListening(){
       if(e.results[i].isFinal)finalTranscript+=e.results[i][0].transcript+' ';
       else interim+=e.results[i][0].transcript;
     }
-    const d=document.getElementById('vpTranscript');
-    d.innerHTML=(finalTranscript?'<span style="font-style:normal;color:var(--text);">'+finalTranscript+'</span>':'')+(interim?'<span style="color:var(--text-muted);font-style:italic;">'+interim+'...</span>':'');
+    const ta=document.getElementById('vpTranscript');
+    ta.value=(finalTranscript+(interim?'('+interim+'...)':'')).trim();
     if(finalTranscript.trim())parseVoice(finalTranscript);
   };
   recognition.onerror=(e)=>{if(e.error!=='no-speech')stopListening();};
@@ -1487,6 +1489,20 @@ function applyAllParsed(){
   document.getElementById('vpStatus').textContent='All added ✓';
   document.getElementById('vpStatus').className='vp-status done';
   setTimeout(()=>closeVoice(),1200);
+}
+
+function sendTranscriptToInstructions(){
+  const ta=document.getElementById('vpTranscript');
+  const text=ta.value.trim();
+  if(!text)return;
+  // Push raw transcript text into bottom instructions bar
+  const bbInp=document.getElementById('bbInput');
+  bbInp.value=(bbInp.value.trim()?bbInp.value.trim()+' · ':'')+text;
+  handleBBInput(bbInp);
+  // Visual feedback
+  const btn=event.target;
+  btn.textContent='✓ Added to Instructions';btn.style.background='#4caf50';
+  setTimeout(()=>{btn.textContent='→ Send to Instructions bar';btn.style.background='';},1800);
 }
 
 function saveVisit(){
