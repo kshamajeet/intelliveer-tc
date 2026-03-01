@@ -60,8 +60,12 @@ body{background:var(--bg);color:var(--text);font-family:'Montserrat',sans-serif;
 .sh-div{width:1px;height:22px;background:var(--border);margin:0 4px;}
 
 /* ── PAT BAR ── */
-.pat-bar{height:var(--pat-h);background:#eee;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:6px;font-size:11px;color:var(--text-mid);position:sticky;top:calc(var(--header-h) + var(--sub-h));z-index:290;}
-.pat-bar-sep{color:var(--border2);margin:0 2px;}
+.pat-bar{height:var(--pat-h);background:#eee;border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:0;font-size:11px;color:var(--text-mid);position:sticky;top:calc(var(--header-h) + var(--sub-h));z-index:290;}
+.pat-bar-inner{display:inline-flex;align-items:center;gap:5px;background:#e0e0e0;border-radius:20px;padding:3px 12px;gap:5px;}
+.pat-bar-sep{color:#bbb;margin:0 1px;}
+.pat-bar-save{margin-left:auto;width:28px;height:28px;border-radius:50%;background:var(--primary);border:none;color:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;box-shadow:0 2px 6px rgba(236,110,77,.35);transition:all .15s;}
+.pat-bar-save:hover{background:#d4593a;transform:scale(1.08);}
+.pat-bar-save.saved{background:#4caf50;}
 .pat-tag{background:var(--primary2);color:white;font-weight:600;font-size:10px;padding:1px 7px;border-radius:10px;}
 
 /* ── CONTENT ROW ── */
@@ -290,6 +294,8 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-tag.instr{background:var(--instr-l);color:var(--instr);border:1px solid var(--instr);}
 .bb-tag-rm{cursor:pointer;opacity:.5;font-size:10px;transition:opacity .12s;}
 .bb-tag-rm:hover{opacity:1;}
+.bb-tag-text:hover{opacity:.75;}
+.bb-tag:hover .bb-tag-text{text-decoration:underline dotted;}
 .bb-empty{font-size:11px;color:var(--text-muted);font-style:italic;}
 .bb-input-row{display:flex;align-items:center;gap:10px;padding:6px 16px 7px;}
 .as-toggle{display:flex;align-items:center;gap:5px;flex-shrink:0;}
@@ -351,10 +357,10 @@ textarea.notes:focus{border-color:var(--primary);}
   <div class="header-biz">OrthoGroup</div>
   <div class="header-search"><span>🔍</span><input type="text" placeholder="Search patients..."><span style="color:rgba(255,255,255,.7);font-size:10px;">▾</span></div>
   <div class="header-patient">
-    <div class="pat-main"><div class="pat-photo">PM</div><div><div class="pat-name">Priya Menon</div><div class="pat-id">#ORT-2847</div></div></div>
+    <div class="pat-main"><div class="pat-photo">JS</div><div><div class="pat-name">John Smith</div><div class="pat-id">#ORT-1042</div></div></div>
     <div class="pat-photos-sm"><div class="pat-photo-sm"></div><div class="pat-photo-sm"></div><div class="pat-photo-sm"></div></div>
   </div>
-  <div class="header-staff"><span>Dr. Sharma</span><div style="display:flex;gap:8px;"><div class="h-icon">🕐</div><div class="h-icon">📋</div><div class="h-icon">🔒</div><div class="h-icon">☰</div></div></div>
+  <div class="header-staff"><span>Username</span><div style="display:flex;gap:8px;"><div class="h-icon">🕐</div><div class="h-icon">📋</div><div class="h-icon">🔒</div><div class="h-icon">☰</div></div></div>
 </header>
 
 <!-- LEFT NAV -->
@@ -378,11 +384,17 @@ textarea.notes:focus{border-color:var(--primary);}
 
   <!-- Patient bar -->
   <div class="pat-bar">
-    <span>Priya Menon</span><span class="pat-bar-sep">·</span><span>J-on</span><span class="pat-bar-sep">·</span>
-    <span>14y 2m</span><span class="pat-bar-sep">·</span><span>F</span><span class="pat-bar-sep">·</span>
-    <span>She/Her</span><span class="pat-bar-sep">·</span><span>Eng</span><span class="pat-bar-sep">·</span>
-    <span class="pat-tag">Active Tx</span><span class="pat-bar-sep">·</span><span>Treatment 1</span><span class="pat-bar-sep">·</span>
-    <span>Dr. S</span><span class="pat-bar-sep">·</span><span>JS</span>
+    <div class="pat-bar-inner">
+      <span>John Smith</span><span class="pat-bar-sep">·</span><span>J-on</span><span class="pat-bar-sep">·</span>
+      <span>14y 2m</span><span class="pat-bar-sep">·</span><span>F</span><span class="pat-bar-sep">·</span>
+      <span>She/Her</span><span class="pat-bar-sep">·</span><span>Eng</span><span class="pat-bar-sep">·</span>
+      <span class="pat-tag">Active Tx</span><span class="pat-bar-sep">·</span><span>Treatment 1</span><span class="pat-bar-sep">·</span>
+      <span>Dr. S</span><span class="pat-bar-sep">·</span><span>JS</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;margin-left:auto;">
+      <button class="pat-bar-save" id="patResetBtn" onclick="resetVisit()" title="Reset visit" style="background:#888;">↺</button>
+      <button class="pat-bar-save" id="patSaveBtn" onclick="saveVisit()" title="Save visit">💾</button>
+    </div>
   </div>
 
   <!-- Content row -->
@@ -887,7 +899,6 @@ textarea.notes:focus{border-color:var(--primary);}
     <!-- Voice button — opens inline voice area -->
     <div class="mic-wave" id="micWave" style="flex-shrink:0;"><span></span><span></span><span></span><span></span><span></span></div>
     <button class="voice-btn" id="voiceBtn" onclick="toggleListening()" title="Tap to speak">🎙️</button>
-    <button class="clr-btn" onclick="clearAll()">Clear</button>
     <button class="save-btn" id="bbSendBtn" onclick="sendInputToInstructions()">Send →</button>
   </div>
 
@@ -1005,14 +1016,28 @@ function rebuildQInput(quad){
 
 // ═══ SEND TO BOTTOM BAR ══════════════════════════════
 function sendToBar(quad){
-  const val=document.getElementById(quad+'-input').value.trim();
+  const inp=document.getElementById(quad+'-input');
+  const val=inp?inp.value.trim():'';
   if(!val)return;
   barTags[quad]=val;
   renderBarTags();
   const sb=document.getElementById(quad+'-send');
-  const orig=sb.textContent;
   sb.textContent='✓ Sent'; sb.classList.add('sent');
-  setTimeout(()=>{sb.textContent='→ Send';sb.classList.remove('sent');},1600);
+  setTimeout(()=>{
+    // Reset quadrant back to default
+    inp.value='';
+    QV[quad]='';
+    sb.textContent='→ Send';
+    sb.classList.remove('sent','show');
+    // Deselect all chips/opts/items in this quadrant
+    const qEl=document.getElementById('q-'+quad);
+    if(qEl){
+      qEl.querySelectorAll('.opt.sel').forEach(el=>el.classList.remove('sel'));
+      qEl.querySelectorAll('.aux-item.sel').forEach(el=>{el.classList.remove('sel');el.querySelector('.aux-chk').style.cssText='';});
+      qEl.querySelectorAll('.instr-item.sel').forEach(el=>{el.classList.remove('sel');el.querySelector('.instr-chk').style.cssText='';});
+      qEl.querySelectorAll('.fav-item.sel').forEach(el=>el.classList.remove('sel'));
+    }
+  },1200);
   setTabDot('braces','partial');
 }
 
@@ -1025,8 +1050,30 @@ function renderBarTags(){
     setTabDot('braces','');
     return;
   }
-  c.innerHTML=entries.map(([q,t])=>`<span class="bb-tag ${QCOL[q]}" id="bbtag-${q}"><strong>${QLBL[q]}:</strong>&nbsp;${t}&nbsp;<span class="bb-tag-rm" onclick="rmTag('${q}')">✕</span></span>`).join('');
+  c.innerHTML=entries.map(([q,t])=>
+    `<span class="bb-tag ${QCOL[q]}" id="bbtag-${q}" title="Click to edit">
+      <strong>${QLBL[q]}:</strong>&nbsp;<span class="bb-tag-text" onclick="editTag('${q}')" style="cursor:text;border-bottom:1px dashed currentColor;">${t}</span>&nbsp;<span class="bb-tag-rm" onclick="rmTag('${q}')">✕</span>
+    </span>`
+  ).join('');
   setTabDot('braces','done');
+}
+
+function editTag(q){
+  const text=barTags[q];
+  if(!text)return;
+  // Pull text back into input bar
+  const inp=document.getElementById('bbInput');
+  inp.value=text;
+  inp.focus();
+  // Remove tag from row
+  delete barTags[q];
+  renderBarTags();
+  handleBBInput(inp);
+  // Update send button to show it's editing
+  const btn=document.getElementById('bbSendBtn');
+  btn.textContent='Update →';
+  inp.onblur=null; // reset
+  // When sent again it goes back as a new tag
 }
 
 function rmTag(q){
@@ -1460,6 +1507,35 @@ function applyEntry(i){
     const b=el.querySelector('.vp-apply-btn');if(b){b.textContent='✓ Added';b.style.color='#2e7d32';}
   }
   updateCharts();
+}
+
+function resetVisit(){
+  // Reset all quadrant inputs and selections
+  clearAll();
+  // Reset bar tags
+  Object.keys(barTags).forEach(k=>delete barTags[k]);
+  renderBarTags();
+  // Reset bottom input
+  document.getElementById('bbInput').value='';
+  document.getElementById('bbGhost').style.display='none';
+  // Visual feedback
+  const btn=document.getElementById('patResetBtn');
+  btn.style.background='var(--primary)';btn.textContent='✓';
+  setTimeout(()=>{btn.style.background='#888';btn.textContent='↺';},1500);
+}
+
+function saveVisit(){
+  const btn=document.getElementById('patSaveBtn');
+  const hasTags=Object.keys(barTags).length>0;
+  const hasBBInput=document.getElementById('bbInput').value.trim().length>0;
+  if(!hasTags&&!hasBBInput){
+    btn.style.animation='shake .3s ease';
+    setTimeout(()=>btn.style.animation='',400);
+    return;
+  }
+  btn.classList.add('saved');
+  btn.textContent='✓';
+  setTimeout(()=>{btn.classList.remove('saved');btn.textContent='💾';},2000);
 }
 
 function applyAllParsed(){
