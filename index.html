@@ -277,47 +277,11 @@ textarea.notes:focus{border-color:var(--primary);}
 .placeholder-icon{font-size:36px;margin-bottom:10px;opacity:.35;}
 .placeholder-title{font-weight:700;font-size:15px;margin-bottom:5px;}
 
-/* ── VOICE PANEL ── */
-.voice-panel{position:fixed;bottom:72px;left:var(--nav-w);right:0;z-index:450;background:white;border-top:2px solid var(--primary);box-shadow:0 -8px 32px rgba(0,0,0,.12);transform:translateY(100%);transition:transform .3s ease;max-height:260px;}
-.voice-panel.open{transform:translateY(0);}
-.vp-header{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;border-bottom:1px solid var(--border);background:#fff8f0;}
-.vp-title{font-weight:700;font-size:13px;color:var(--primary);display:flex;align-items:center;gap:8px;}
-.vp-status{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;background:var(--bg);color:var(--text-muted);transition:all .2s;}
-.vp-status.listening{background:#ffeee9;color:var(--primary);}
-.vp-status.done{background:#e8f5e9;color:#2e7d32;}
-.vp-close{background:transparent;border:1px solid var(--border);color:var(--text-muted);font-size:11px;padding:3px 10px;border-radius:4px;cursor:pointer;font-family:'Montserrat',sans-serif;}
-.vp-body{display:grid;grid-template-columns:1fr 1fr;height:calc(260px - 48px);}
-.vp-left{padding:12px 16px;border-right:1px solid var(--border);overflow-y:auto;}
-.vp-right{padding:12px 16px;overflow-y:auto;}
-.vp-sec-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:8px;}
-.vp-transcript{background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:10px 12px;min-height:60px;font-size:12px;color:var(--text-mid);line-height:1.6;font-style:italic;}
-.vp-hint{font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.6;}
-.vp-hint strong{color:var(--primary2);}
-.vp-parsed{display:flex;flex-direction:column;gap:5px;}
-.vp-parsed-item{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--bg);}
-.vp-parsed-item.new{background:#fff8f0;border-color:var(--primary2);animation:fadeIn .3s ease;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-.vp-cat{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:3px;flex-shrink:0;}
-.cat-wire{background:var(--wire-l);color:var(--wire);}
-.cat-aux{background:var(--aux-l);color:var(--aux);}
-.cat-elastic{background:var(--elastic-l);color:var(--elastic);}
-.cat-instr{background:var(--instr-l);color:var(--instr);}
-.vp-parsed-text{font-size:11px;color:var(--text-mid);flex:1;}
-.vp-apply-btn{font-size:10px;font-weight:600;color:var(--primary);background:transparent;border:1px solid var(--primary2);border-radius:3px;padding:2px 7px;cursor:pointer;font-family:'Montserrat',sans-serif;flex-shrink:0;}
-.vp-apply-btn:hover{background:var(--primary);color:white;border-color:var(--primary);}
-.mic-wave{display:none;gap:2px;align-items:center;height:16px;}
-.mic-wave.active{display:flex;}
-.mic-wave span{display:block;width:3px;border-radius:2px;background:white;animation:wave .8s ease-in-out infinite;}
-.mic-wave span:nth-child(1){height:4px;animation-delay:0s;}
-.mic-wave span:nth-child(2){height:8px;animation-delay:.1s;}
-.mic-wave span:nth-child(3){height:12px;animation-delay:.2s;}
-.mic-wave span:nth-child(4){height:8px;animation-delay:.3s;}
-.mic-wave span:nth-child(5){height:4px;animation-delay:.4s;}
-@keyframes wave{0%,100%{transform:scaleY(.5);opacity:.5;}50%{transform:scaleY(1.2);opacity:1;}}
+/* Voice panel styles now in bottom bar CSS */
 
 /* ── BOTTOM BAR ── */
 .bottom-bar{position:fixed;bottom:0;left:var(--nav-w);right:0;z-index:400;background:white;border-top:2px solid var(--primary);box-shadow:0 -4px 20px rgba(0,0,0,.1);}
-.bb-tags-row{display:flex;align-items:center;gap:8px;padding:6px 16px;border-bottom:1px solid var(--border);min-height:36px;flex-wrap:wrap;}
+.bb-tags-row{display:flex;align-items:center;gap:8px;padding:5px 16px;border-bottom:1px solid var(--border);min-height:34px;flex-wrap:wrap;}
 .bb-tags-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);flex-shrink:0;}
 .bb-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;flex-shrink:0;}
 .bb-tag.wire{background:var(--wire-l);color:var(--wire);border:1px solid var(--wire);}
@@ -327,7 +291,7 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-tag-rm{cursor:pointer;opacity:.5;font-size:10px;transition:opacity .12s;}
 .bb-tag-rm:hover{opacity:1;}
 .bb-empty{font-size:11px;color:var(--text-muted);font-style:italic;}
-.bb-input-row{display:flex;align-items:center;gap:10px;padding:6px 16px 8px;}
+.bb-input-row{display:flex;align-items:center;gap:10px;padding:6px 16px 7px;}
 .as-toggle{display:flex;align-items:center;gap:5px;flex-shrink:0;}
 .as-lbl{font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;line-height:1.3;text-align:center;}
 .as-sw{position:relative;width:32px;height:18px;cursor:pointer;flex-shrink:0;}
@@ -339,13 +303,45 @@ textarea.notes:focus{border-color:var(--primary);}
 .bb-input-wrap{flex:1;position:relative;}
 .bb-input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;color:var(--text);outline:none;transition:border-color .15s;}
 .bb-input:focus{border-color:var(--primary);}
-.bb-ghost{position:absolute;top:0;left:0;right:0;bottom:0;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;pointer-events:none;border-radius:7px;display:flex;align-items:center;overflow:hidden;white-space:nowrap;}
+.bb-ghost{position:absolute;top:0;left:0;right:0;bottom:0;padding:7px 12px;font-family:'Montserrat',sans-serif;font-size:12px;pointer-events:none;border-radius:7px;display:flex;align-items:center;overflow:hidden;white-space:nowrap;cursor:pointer;}
 .bb-ghost-typed{color:transparent;}
 .bb-ghost-suggest{color:#bbb;font-style:italic;}
 .bb-ghost-hint{position:absolute;right:10px;font-size:9px;color:#ccc;background:white;padding:1px 5px;border-radius:3px;border:1px solid var(--border);}
+/* Voice area inline */
+.bb-voice-area{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--border);max-height:180px;}
+.bb-voice-left{padding:10px 16px;border-right:1px solid var(--border);overflow-y:auto;}
+.bb-voice-right{padding:10px 16px;overflow-y:auto;}
+.bb-voice-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.bb-voice-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.vp-transcript{background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:8px 10px;font-size:11px;color:var(--text-mid);line-height:1.6;font-style:italic;min-height:48px;}
+.vp-status{font-size:11px;font-weight:600;padding:2px 9px;border-radius:20px;background:var(--bg);color:var(--text-muted);}
+.vp-status.listening{background:#ffeee9;color:var(--primary);}
+.vp-status.done{background:#e8f5e9;color:#2e7d32;}
+.vp-parsed{display:flex;flex-direction:column;gap:4px;}
+.vp-parsed-item{display:flex;align-items:center;gap:7px;padding:5px 9px;border-radius:5px;border:1.5px solid var(--border);background:var(--bg);}
+.vp-parsed-item.new{background:#fff8f0;border-color:var(--primary2);}
+.vp-cat{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:3px;flex-shrink:0;}
+.cat-wire{background:var(--wire-l);color:var(--wire);}
+.cat-aux{background:var(--aux-l);color:var(--aux);}
+.cat-elastic{background:var(--elastic-l);color:var(--elastic);}
+.cat-instr{background:var(--instr-l);color:var(--instr);}
+.vp-parsed-text{font-size:11px;color:var(--text-mid);flex:1;}
+.vp-apply-btn{font-size:10px;font-weight:600;color:var(--primary);background:transparent;border:1px solid var(--primary2);border-radius:3px;padding:2px 7px;cursor:pointer;font-family:'Montserrat',sans-serif;flex-shrink:0;}
+.vp-apply-btn:hover{background:var(--primary);color:white;}
+/* mic wave */
+.mic-wave{display:none;gap:2px;align-items:center;height:14px;}
+.mic-wave.active{display:flex;}
+.mic-wave span{display:block;width:3px;border-radius:2px;background:var(--primary);animation:wave .8s ease-in-out infinite;}
+.mic-wave span:nth-child(1){height:4px;animation-delay:0s;}
+.mic-wave span:nth-child(2){height:8px;animation-delay:.1s;}
+.mic-wave span:nth-child(3){height:12px;animation-delay:.2s;}
+.mic-wave span:nth-child(4){height:8px;animation-delay:.3s;}
+.mic-wave span:nth-child(5){height:4px;animation-delay:.4s;}
+@keyframes wave{0%,100%{transform:scaleY(.5);opacity:.5;}50%{transform:scaleY(1.2);opacity:1;}}
 .voice-btn{width:36px;height:36px;border-radius:50%;border:1.5px solid var(--border2);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex-shrink:0;transition:all .15s;}
 .voice-btn:hover{border-color:var(--primary);}
 .voice-btn.listening{background:var(--grad);border-color:transparent;animation:pulse 1.2s infinite;}
+.voice-btn.voice-open{background:#fff3ee;border-color:var(--primary);color:var(--primary);}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(236,110,77,.4);}70%{box-shadow:0 0 0 10px rgba(236,110,77,0);}100%{box-shadow:0 0 0 0 rgba(236,110,77,0);}}
 .save-btn{background:var(--grad);color:white;border:none;font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;padding:8px 18px;border-radius:7px;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(236,110,77,.3);}
 .save-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(236,110,77,.45);}
@@ -846,54 +842,75 @@ textarea.notes:focus{border-color:var(--primary);}
   </div><!-- /content-row -->
 </div><!-- /app-body -->
 
-<!-- VOICE PANEL -->
-<div class="voice-panel" id="voicePanel">
-  <div class="vp-header">
-    <div class="vp-title">🎙️ Voice Entry<div class="mic-wave" id="micWave"><span></span><span></span><span></span><span></span><span></span></div></div>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="vp-status" id="vpStatus">Ready</div>
-      <button class="vp-close" onclick="closeVoice()">✕ Close</button>
-    </div>
-  </div>
-  <div class="vp-body">
-    <div class="vp-left">
-      <div class="vp-sec-lbl">🎤 Transcript</div>
-      <div class="vp-transcript" id="vpTranscript"><span style="color:var(--text-muted);font-style:italic;">Tap mic · speak naturally — e.g. "new nineteen twenty-five stainless both extended to sevens, power chain lower, class two elastics heavy, oralizing recall six weeks"</span></div>
-      <div class="vp-hint" style="margin-top:8px;">Try: <strong>"new wire 19×25 SS both ext 7s"</strong> · <strong>"class two heavy"</strong> · <strong>"oralizing recall 6 weeks"</strong></div>
-    </div>
-    <div class="vp-right">
-      <div class="vp-sec-lbl">✨ Detected entries</div>
-      <div class="vp-parsed" id="vpParsed"><div style="font-size:11px;color:var(--text-muted);font-style:italic;">Entries appear here as you speak...</div></div>
-      <div style="margin-top:10px;"><button class="btn-apply" id="vpApplyAll" onclick="applyAllParsed()" style="width:100%;padding:8px;display:none;">Apply All ✓</button></div>
-    </div>
-  </div>
-</div>
+<!-- UNIFIED INTELLIGENT BOTTOM BAR -->
+<div class="bottom-bar" id="bottomBar">
 
-<!-- BOTTOM BAR -->
-<div class="bottom-bar">
-  <div class="bb-tags-row">
-    <div class="bb-tags-lbl">Entry</div>
+  <!-- Row 1: Quadrant tags -->
+  <div class="bb-tags-row" id="bbTagsRow">
+    <div class="bb-tags-lbl">Sent</div>
     <div id="bb-tags" style="display:flex;gap:6px;flex-wrap:wrap;flex:1;align-items:center;">
-      <span class="bb-empty">— tap → Send from any quadrant to build entry</span>
+      <span class="bb-empty" id="bbEmpty">— tap → Send from any quadrant</span>
     </div>
   </div>
+
+  <!-- Row 2: Intelligent input -->
   <div class="bb-input-row">
-    <div class="as-toggle">
+    <!-- Auto suggest toggle -->
+    <div class="as-toggle" title="Toggle auto-suggest ghost text">
       <div class="as-lbl">Auto<br>Suggest</div>
-      <label class="as-sw"><input type="checkbox" id="asToggle" checked onchange="autoSuggestOn=this.checked;if(!this.checked)document.getElementById('bbGhost').style.display='none';"><div class="as-track"></div><div class="as-thumb"></div></label>
+      <label class="as-sw">
+        <input type="checkbox" id="asToggle" checked onchange="autoSuggestOn=this.checked;if(!this.checked)document.getElementById('bbGhost').style.display='none';">
+        <div class="as-track"></div><div class="as-thumb"></div>
+      </label>
     </div>
+
+    <!-- Main input with ghost suggest overlay -->
     <div class="bb-input-wrap">
-      <input class="bb-input" id="bbInput" placeholder="Type, use voice above, or tap → Send from quadrants..." oninput="handleBBInput(this)" onkeydown="handleBBKey(event)">
+      <input class="bb-input" id="bbInput"
+        placeholder="Type here · or tap → Send from any quadrant above · or use 🎙️ voice..."
+        oninput="handleBBInput(this)"
+        onkeydown="handleBBKey(event)">
       <div class="bb-ghost" id="bbGhost" style="display:none;" onclick="acceptSuggest()">
         <span class="bb-ghost-typed" id="bbGhostTyped"></span>
         <span class="bb-ghost-suggest" id="bbGhostSuggest"></span>
-        <span class="bb-ghost-hint">Tab ↹ or click</span>
+        <span class="bb-ghost-hint">Tab ↹</span>
       </div>
     </div>
-    <button class="voice-btn" id="voiceBtn" onclick="toggleVoice()">🎙️</button>
+
+    <!-- Voice button — opens inline voice area -->
+    <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceArea()" title="Voice input">🎙️</button>
     <button class="clr-btn" onclick="clearAll()">Clear</button>
     <button class="save-btn" onclick="saveVisit()">Save Visit ✓</button>
   </div>
+
+  <!-- Row 3: Voice area (hidden by default, expands inline) -->
+  <div class="bb-voice-area" id="bbVoiceArea" style="display:none;">
+    <div class="bb-voice-left">
+      <div class="bb-voice-header">
+        <div class="bb-voice-title">
+          🎙️ Voice Entry
+          <div class="mic-wave" id="micWave"><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="vp-status" id="vpStatus">Ready — tap mic to begin</div>
+          <button class="voice-btn" id="voiceMicBtn" onclick="toggleListening()" style="width:32px;height:32px;font-size:14px;">🎙️</button>
+        </div>
+      </div>
+      <div class="vp-transcript" id="vpTranscript">
+        <span style="color:var(--text-muted);font-style:italic;">Tap mic and speak — e.g. "new nineteen twenty-five stainless both extended to sevens, class two heavy, oralizing recall six weeks"</span>
+      </div>
+    </div>
+    <div class="bb-voice-right">
+      <div class="bb-voice-header">
+        <div class="bb-voice-title">✨ Detected entries</div>
+        <button class="btn-apply" id="vpApplyAll" onclick="applyAllParsed()" style="display:none;font-size:10px;padding:4px 10px;">Apply All ✓</button>
+      </div>
+      <div class="vp-parsed" id="vpParsed">
+        <div style="font-size:11px;color:var(--text-muted);font-style:italic;">Detected entries appear here as you speak...</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -1019,13 +1036,21 @@ function sendToBar(quad){
 
 function renderBarTags(){
   const c=document.getElementById('bb-tags');
+  if(!c)return;
   const entries=Object.entries(barTags);
-  if(!entries.length){c.innerHTML='<span class="bb-empty">— tap → Send from any quadrant to build entry</span>';return;}
-  c.innerHTML=entries.map(([q,t])=>`<span class="bb-tag ${QCOL[q]}">${QLBL[q]}: ${t}<span class="bb-tag-rm" onclick="rmTag('${q}')">✕</span></span>`).join('');
+  if(!entries.length){
+    c.innerHTML='<span class="bb-empty" id="bbEmpty">— tap → Send from any quadrant</span>';
+    setTabDot('braces','');
+    return;
+  }
+  c.innerHTML=entries.map(([q,t])=>`<span class="bb-tag ${QCOL[q]}" id="bbtag-${q}"><strong>${QLBL[q]}:</strong>&nbsp;${t}&nbsp;<span class="bb-tag-rm" onclick="rmTag('${q}')">✕</span></span>`).join('');
   setTabDot('braces','done');
 }
 
-function rmTag(q){delete barTags[q];renderBarTags();if(!Object.keys(barTags).length)setTabDot('braces','');}
+function rmTag(q){
+  delete barTags[q];
+  renderBarTags();
+}
 
 // ═══ AUTO SUGGEST ════════════════════════════════════
 const SUGGESTS=[
@@ -1219,20 +1244,26 @@ function setTabDot(tab,cls){
 }
 
 // ═══ VOICE ════════════════════════════════════════════
-function toggleVoice(){
-  const panel=document.getElementById('voicePanel');
+function toggleVoiceArea(){
+  const area=document.getElementById('bbVoiceArea');
   const btn=document.getElementById('voiceBtn');
-  if(!panel.classList.contains('open')){
-    panel.classList.add('open');
-    btn.style.background='var(--grad)';btn.style.borderColor='transparent';btn.style.color='white';
+  const isOpen=area.style.display!=='none';
+  if(isOpen){
+    area.style.display='none';
+    btn.classList.remove('voice-open');
+    if(isListening)stopListening();
   } else {
-    if(isListening)stopListening();else startListening();
+    area.style.display='grid';
+    btn.classList.add('voice-open');
   }
 }
 function closeVoice(){
+  document.getElementById('bbVoiceArea').style.display='none';
+  document.getElementById('voiceBtn').classList.remove('voice-open');
   if(isListening)stopListening();
-  document.getElementById('voicePanel').classList.remove('open');
-  document.getElementById('voiceBtn').style.cssText='';
+}
+function toggleListening(){
+  if(isListening)stopListening();else startListening();
 }
 function startListening(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1313,8 +1344,11 @@ function applyEntry(i){
     QV[e.quad]=inp.value;
     document.getElementById(e.quad+'-send').classList.add('show');
   }
+  // Also push directly to bottom bar tags
+  barTags[e.quad]=(barTags[e.quad]?barTags[e.quad]+' · ':'')+e.val;
+  renderBarTags();
   const el=document.getElementById('vpe'+i);
-  if(el){el.style.background='#e8f5e9';el.style.borderColor='#4caf50';el.querySelector('.vp-apply-btn').textContent='✓';}
+  if(el){el.style.background='#e8f5e9';el.style.borderColor='#4caf50';const b=el.querySelector('.vp-apply-btn');if(b)b.textContent='✓';}
   updateCharts();
 }
 
